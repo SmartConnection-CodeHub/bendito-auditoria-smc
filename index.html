@@ -1,0 +1,2035 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bendito Capricho · v1 vs v2 · War Room SMC</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;700&family=Plus+Jakarta+Sans:wght@500;700;800&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+  :root {
+    /* === V1 (Bendito original) === */
+    --b-purple: #7C3AED;
+    --b-lila: #C4B5FD;
+    --b-cream: #FAF5FF;
+    --b-pink: #FCE7F3;
+
+    /* === V2 (paleta clara · misma base Bendito · más pro) === */
+    --v2-bg: #FAF5FF;
+    --v2-bg-2: #F5EEFF;
+    --v2-surface: #FFFFFF;
+    --v2-surface-2: #FBF7FF;
+    --v2-border: #EADCFB;
+    --v2-border-strong: #D4BBFC;
+    --v2-text: #1E1B2E;
+    --v2-text-dim: #54506B;
+    --v2-text-muted: #8B85A3;
+    --v2-brand: #7C3AED;
+    --v2-brand-2: #A855F7;
+    --v2-accent: #10B981;
+    --v2-warn: #F59E0B;
+    --v2-danger: #EF4444;
+    --v2-info: #06B6D4;
+
+    --bendito-rose: #C026D3;
+    --bendito-rose-soft: #D946EF;
+    --burdeo: #8B1538;
+    --burdeo-soft: #B83A5C;
+  }
+
+  * { -webkit-font-smoothing: antialiased; box-sizing: border-box; }
+  body {
+    font-family: 'Inter', -apple-system, system-ui, sans-serif;
+    margin: 0; padding: 0;
+    overflow-x: hidden;
+    transition: background 0.5s cubic-bezier(.32,.72,0,1);
+  }
+
+  /* ===== BODY THEMES ===== */
+  body[data-mode="v1"] {
+    background: #FAF5FF;
+    color: #1e293b;
+  }
+  body[data-mode="v2"], body[data-mode="compare"], body[data-mode="audit"] {
+    background: var(--v2-bg);
+    background-image:
+      radial-gradient(ellipse 70% 40% at 15% 0%, rgba(168,85,247,0.10), transparent),
+      radial-gradient(ellipse 60% 40% at 85% 100%, rgba(236,72,153,0.08), transparent),
+      radial-gradient(ellipse 50% 30% at 50% 50%, rgba(16,185,129,0.04), transparent);
+    color: var(--v2-text);
+  }
+
+  /* ===== MOTION ===== */
+  @keyframes fadeInUp { from {opacity:0; transform:translateY(20px)} to {opacity:1; transform:translateY(0)} }
+  @keyframes fadeIn { from {opacity:0} to {opacity:1} }
+  @keyframes scaleIn { from {opacity:0; transform:scale(.96)} to {opacity:1; transform:scale(1)} }
+  @keyframes pulse-soft { 0%,100% {opacity:1} 50% {opacity:.6} }
+  @keyframes pulse-glow { 0%,100% {box-shadow:0 0 0 0 rgba(123,104,238,.4)} 50% {box-shadow:0 0 0 8px rgba(123,104,238,0)} }
+  @keyframes shimmer-line { 0%{background-position:-200% 0} 100%{background-position:200% 0} }
+  @keyframes float { 0%,100% {transform:translateY(0)} 50% {transform:translateY(-4px)} }
+  @keyframes gradient-shift { 0%,100% {background-position:0% 50%} 50% {background-position:100% 50%} }
+  @keyframes slide-in-right { from {transform:translateX(100%)} to {transform:translateX(0)} }
+
+  .animate-fade-up { animation: fadeInUp .6s cubic-bezier(.32,.72,0,1) both; }
+  .animate-scale-in { animation: scaleIn .5s cubic-bezier(.32,.72,0,1) both; }
+  .animate-fade { animation: fadeIn .4s ease both; }
+  .stagger > * { animation: fadeInUp .55s cubic-bezier(.32,.72,0,1) both; }
+  .stagger > *:nth-child(1) {animation-delay:30ms}
+  .stagger > *:nth-child(2) {animation-delay:60ms}
+  .stagger > *:nth-child(3) {animation-delay:90ms}
+  .stagger > *:nth-child(4) {animation-delay:120ms}
+  .stagger > *:nth-child(5) {animation-delay:150ms}
+  .stagger > *:nth-child(6) {animation-delay:180ms}
+  .stagger > *:nth-child(7) {animation-delay:210ms}
+  .stagger > *:nth-child(8) {animation-delay:240ms}
+  .stagger > *:nth-child(9) {animation-delay:270ms}
+  .stagger > *:nth-child(10) {animation-delay:300ms}
+  .stagger > *:nth-child(11) {animation-delay:330ms}
+  .stagger > *:nth-child(12) {animation-delay:360ms}
+
+  /* ===== MODE BANNER ===== */
+  .mode-banner {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 60;
+    padding: 8px 24px; font-size: 12px; font-weight: 600;
+    text-align: center; color: white;
+    backdrop-filter: blur(20px);
+    transition: all 0.4s ease;
+    font-family: 'Inter', sans-serif;
+    letter-spacing: 0.3px;
+  }
+  body[data-mode="v1"] .mode-banner {
+    background: linear-gradient(90deg, #475569dd 0%, #334155dd 100%);
+  }
+  body[data-mode="v2"] .mode-banner,
+  body[data-mode="compare"] .mode-banner,
+  body[data-mode="audit"] .mode-banner {
+    background: linear-gradient(90deg, var(--v2-brand) 0%, #EC4899 50%, var(--v2-accent) 100%);
+    background-size: 200% 200%;
+    animation: gradient-shift 4s ease infinite;
+    box-shadow: 0 4px 16px rgba(124,58,237,0.18);
+  }
+
+  /* ===== APP SHELL ===== */
+  .bendito-shell {
+    display: grid;
+    min-height: 100vh;
+    padding-top: 36px;
+    transition: all 0.5s cubic-bezier(.32,.72,0,1);
+  }
+  body[data-mode="v1"] .bendito-shell { grid-template-columns: 240px 1fr; }
+  body[data-mode="v2"] .bendito-shell { grid-template-columns: 260px 1fr; }
+  body[data-mode="compare"] .bendito-shell,
+  body[data-mode="audit"] .bendito-shell { grid-template-columns: 1fr; }
+
+  /* ===== SIDEBAR V1 (lila) ===== */
+  body[data-mode="v1"] .sidebar {
+    background: linear-gradient(180deg, var(--b-pink) 0%, #fdf2f8 100%);
+    border-right: 1px solid rgba(168,85,247,0.15);
+    padding: 24px 16px;
+    font-family: 'Inter', sans-serif;
+  }
+  body[data-mode="v1"] .sidebar-link {
+    display: flex; align-items: center; gap: 12px;
+    padding: 10px 12px; margin: 4px 0;
+    border-radius: 12px;
+    font-size: 14px; color: #475569;
+    transition: all .25s cubic-bezier(.32,.72,0,1);
+    cursor: pointer;
+  }
+  body[data-mode="v1"] .sidebar-link:hover { background: rgba(168,85,247,.08); }
+  body[data-mode="v1"] .sidebar-link.active {
+    background: linear-gradient(135deg, #f3e8ff 0%, #fce7f3 100%);
+    color: var(--b-purple); font-weight: 600;
+  }
+  body[data-mode="v1"] .sidebar-link.broken { color: #ef4444; opacity: .7; }
+  body[data-mode="v1"] .sidebar-link.broken::after {
+    content: '404'; margin-left: auto; font-size: 10px;
+    background: #fee2e2; color: #991b1b; padding: 2px 6px; border-radius: 4px;
+  }
+
+  /* ===== SIDEBAR V2 (light · más pro que v1) ===== */
+  body[data-mode="v2"] .sidebar {
+    background: linear-gradient(180deg, #FFFFFF 0%, #FBF7FF 60%, #F5EEFF 100%);
+    border-right: 1px solid var(--v2-border);
+    padding: 20px 14px;
+    font-family: 'Inter', sans-serif;
+    position: relative;
+    box-shadow: 4px 0 16px rgba(124,58,237,0.04);
+  }
+  body[data-mode="v2"] .sidebar::before {
+    content: ''; position: absolute; top: 0; right: 0; bottom: 0; width: 2px;
+    background: linear-gradient(180deg, transparent, var(--v2-brand) 30%, #EC4899 60%, var(--v2-accent) 90%, transparent);
+    opacity: 0.5;
+  }
+  body[data-mode="v2"] .sidebar-link {
+    display: flex; align-items: center; gap: 10px;
+    padding: 10px 12px; margin: 2px 0;
+    border-radius: 10px;
+    font-size: 13px; color: var(--v2-text-dim);
+    transition: all .2s cubic-bezier(.32,.72,0,1);
+    cursor: pointer;
+    font-weight: 500;
+    position: relative;
+  }
+  body[data-mode="v2"] .sidebar-link:hover {
+    background: rgba(124,58,237,.08);
+    color: var(--v2-brand);
+    transform: translateX(2px);
+  }
+  body[data-mode="v2"] .sidebar-link.active {
+    background: linear-gradient(135deg, #F3E8FF 0%, #FCE7F3 100%);
+    color: var(--v2-brand); font-weight: 700;
+    box-shadow: 0 2px 8px rgba(124,58,237,0.12), inset 0 0 0 1px rgba(124,58,237,0.15);
+  }
+  body[data-mode="v2"] .sidebar-link.active::before {
+    content: ''; position: absolute; left: -14px; top: 50%; transform: translateY(-50%);
+    width: 3px; height: 18px; background: linear-gradient(180deg, var(--v2-brand), #EC4899);
+    border-radius: 0 4px 4px 0;
+    box-shadow: 2px 0 8px rgba(124,58,237,0.3);
+  }
+
+  /* ===== LOGO ===== */
+  .logo-bendito-v1 { text-align: center; padding: 12px 0 24px; }
+  .logo-bendito-v1 .name {
+    font-family: 'Georgia', serif;
+    font-size: 22px; font-weight: 700;
+    color: var(--b-purple); font-style: italic;
+  }
+  .logo-bendito-v1 .tag {
+    font-size: 9px; letter-spacing: 3px; color: #94a3b8;
+    text-transform: uppercase; margin-top: 2px;
+  }
+
+  .logo-bendito-v2 {
+    padding: 8px 6px 24px;
+    display: flex; align-items: center; gap: 10px;
+  }
+  .logo-bendito-v2 .icon {
+    width: 36px; height: 36px;
+    background: linear-gradient(135deg, var(--v2-brand) 0%, var(--v2-accent) 100%);
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 18px; font-weight: 800; color: white;
+    box-shadow: 0 4px 16px rgba(123,104,238,0.4);
+  }
+  .logo-bendito-v2 .text { line-height: 1.1; }
+  .logo-bendito-v2 .name {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 15px; font-weight: 800; color: var(--v2-text);
+    letter-spacing: -0.3px;
+  }
+  .logo-bendito-v2 .tag {
+    font-size: 9px; letter-spacing: 2.5px; color: var(--v2-text-muted);
+    text-transform: uppercase; margin-top: 3px;
+    font-weight: 700;
+  }
+
+  /* ===== MAIN ===== */
+  .main { padding: 24px 32px; max-width: 100%; overflow-x: hidden; min-height: calc(100vh - 36px); }
+
+  /* ===== TYPOGRAPHY V2 ===== */
+  body[data-mode="v2"] h1, body[data-mode="v2"] .page-title,
+  body[data-mode="compare"] h1, body[data-mode="compare"] .page-title,
+  body[data-mode="audit"] h1, body[data-mode="audit"] .page-title {
+    font-family: 'Plus Jakarta Sans', 'Inter', sans-serif;
+    font-weight: 800;
+    color: var(--v2-text);
+    letter-spacing: -0.5px;
+    background: linear-gradient(135deg, var(--v2-brand) 0%, #EC4899 100%);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  }
+  body[data-mode="v2"] h2, body[data-mode="v2"] h3,
+  body[data-mode="compare"] h2, body[data-mode="compare"] h3,
+  body[data-mode="audit"] h2, body[data-mode="audit"] h3 {
+    font-family: 'Plus Jakarta Sans', 'Inter', sans-serif;
+    font-weight: 700; color: var(--v2-text);
+  }
+
+  /* ===== VIEWS ===== */
+  .view { display: none; }
+  .view.active { display: block; animation: fadeInUp .5s cubic-bezier(.32,.72,0,1) both; }
+
+  /* ===== CARDS ===== */
+  /* V1 cards */
+  body[data-mode="v1"] .card {
+    background: white; border-radius: 16px; padding: 20px;
+    box-shadow: 0 1px 3px rgba(0,0,0,.04);
+    transition: all .25s cubic-bezier(.32,.72,0,1);
+  }
+  body[data-mode="v1"] .card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(124,58,237,.08);
+  }
+
+  /* V2 cards · crisp borders + glow hover */
+  body[data-mode="v2"] .card,
+  body[data-mode="compare"] .card,
+  body[data-mode="audit"] .card {
+    background: var(--v2-surface);
+    border-radius: 14px; padding: 20px;
+    border: 1px solid var(--v2-border);
+    transition: all .3s cubic-bezier(.32,.72,0,1);
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 1px 2px rgba(124,58,237,0.04);
+  }
+  body[data-mode="v2"] .card::before,
+  body[data-mode="compare"] .card::before,
+  body[data-mode="audit"] .card::before {
+    content: ''; position: absolute; inset: 0;
+    background: linear-gradient(135deg, rgba(168,85,247,0.03) 0%, transparent 50%);
+    pointer-events: none;
+  }
+  body[data-mode="v2"] .card:hover,
+  body[data-mode="compare"] .card:hover,
+  body[data-mode="audit"] .card:hover {
+    transform: translateY(-3px);
+    border-color: var(--v2-border-strong);
+    box-shadow: 0 12px 32px rgba(124,58,237,0.10), 0 0 0 1px rgba(168,85,247,.15);
+  }
+
+  /* ===== KPI TILES ===== */
+  /* V1 */
+  body[data-mode="v1"] .kpi-tile {
+    background: white; border-radius: 14px; padding: 18px 20px;
+    border: 1px solid #f1f5f9;
+    transition: all .25s ease;
+  }
+  body[data-mode="v1"] .kpi-num {
+    font-size: 32px; font-weight: 800; line-height: 1;
+    background: linear-gradient(135deg, var(--b-purple) 0%, #A855F7 100%);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  }
+  body[data-mode="v1"] .kpi-num.danger { background: linear-gradient(135deg, #ef4444 0%, #f97316 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+  body[data-mode="v1"] .kpi-num.warn { background: linear-gradient(135deg, #f59e0b 0%, #fbbf24 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+
+  /* V2 KPI · light + gradient glow on hover */
+  body[data-mode="v2"] .kpi-tile,
+  body[data-mode="compare"] .kpi-tile,
+  body[data-mode="audit"] .kpi-tile {
+    background: linear-gradient(135deg, #FFFFFF 0%, #FBF7FF 100%);
+    border-radius: 14px; padding: 18px 20px;
+    border: 1px solid var(--v2-border);
+    position: relative; overflow: hidden;
+    transition: all .3s cubic-bezier(.32,.72,0,1);
+    box-shadow: 0 1px 2px rgba(124,58,237,0.04);
+  }
+  body[data-mode="v2"] .kpi-tile::after {
+    content: ''; position: absolute; top: -50%; left: -50%;
+    width: 200%; height: 200%;
+    background: radial-gradient(circle, rgba(168,85,247,0.12) 0%, transparent 50%);
+    opacity: 0; transition: opacity .4s ease;
+  }
+  body[data-mode="v2"] .kpi-tile:hover::after { opacity: 1; }
+  body[data-mode="v2"] .kpi-tile:hover {
+    transform: translateY(-2px);
+    border-color: var(--v2-border-strong);
+    box-shadow: 0 8px 24px rgba(124,58,237,0.10);
+  }
+  body[data-mode="v2"] .kpi-num,
+  body[data-mode="compare"] .kpi-num,
+  body[data-mode="audit"] .kpi-num {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 34px; font-weight: 800; line-height: 1;
+    background: linear-gradient(135deg, var(--v2-brand) 0%, #EC4899 50%, var(--v2-accent) 100%);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    letter-spacing: -1px;
+    position: relative; z-index: 1;
+  }
+  body[data-mode="v2"] .kpi-num.danger,
+  body[data-mode="compare"] .kpi-num.danger,
+  body[data-mode="audit"] .kpi-num.danger {
+    background: linear-gradient(135deg, var(--v2-danger) 0%, #F97316 100%);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  }
+  body[data-mode="v2"] .kpi-num.warn,
+  body[data-mode="compare"] .kpi-num.warn,
+  body[data-mode="audit"] .kpi-num.warn {
+    background: linear-gradient(135deg, var(--v2-warn) 0%, #FBBF24 100%);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  }
+  body[data-mode="v2"] .kpi-tile .label,
+  body[data-mode="compare"] .kpi-tile .label,
+  body[data-mode="audit"] .kpi-tile .label {
+    font-size: 11px; color: var(--v2-text-muted);
+    margin-top: 6px;
+    letter-spacing: 0.5px; text-transform: uppercase;
+    font-weight: 700;
+  }
+
+  /* ===== PILLS / FILTERS ===== */
+  /* V1 */
+  body[data-mode="v1"] .pill {
+    padding: 6px 14px; border-radius: 999px;
+    font-size: 12px; font-weight: 600;
+    cursor: pointer; transition: all .2s ease;
+    color: #64748b; background: transparent;
+    border: 1px solid transparent;
+  }
+  body[data-mode="v1"] .pill:hover { background: #f8fafc; }
+  body[data-mode="v1"] .pill.active {
+    background: linear-gradient(135deg, #f3e8ff 0%, #fce7f3 100%);
+    color: var(--b-purple); border-color: rgba(168,85,247,.2);
+  }
+
+  /* V2 pills · light with brand glow */
+  body[data-mode="v2"] .pill,
+  body[data-mode="compare"] .pill,
+  body[data-mode="audit"] .pill {
+    padding: 7px 16px; border-radius: 999px;
+    font-size: 12px; font-weight: 600;
+    cursor: pointer; transition: all .25s cubic-bezier(.32,.72,0,1);
+    color: var(--v2-text-dim);
+    background: rgba(255,255,255,0.6);
+    border: 1px solid var(--v2-border);
+    letter-spacing: 0.2px;
+  }
+  body[data-mode="v2"] .pill:hover,
+  body[data-mode="compare"] .pill:hover,
+  body[data-mode="audit"] .pill:hover {
+    background: rgba(168,85,247,.08);
+    color: var(--v2-brand);
+    border-color: var(--v2-border-strong);
+  }
+  body[data-mode="v2"] .pill.active,
+  body[data-mode="compare"] .pill.active,
+  body[data-mode="audit"] .pill.active {
+    background: linear-gradient(135deg, #F3E8FF 0%, #FCE7F3 100%);
+    color: var(--v2-brand);
+    border-color: rgba(168,85,247,.4);
+    box-shadow: 0 2px 12px rgba(168,85,247,.18);
+    font-weight: 700;
+  }
+
+  /* ===== V1 checklist rows (plano · feo a propósito) ===== */
+  .v1-checklist-row {
+    padding: 16px 20px;
+    background: white;
+    border-radius: 10px;
+    margin-bottom: 8px;
+    display: flex; align-items: center; justify-content: space-between;
+    border: 1px solid #f1f5f9;
+    transition: background .2s ease;
+  }
+  .v1-checklist-row:hover { background: #fafaf9; }
+
+  .progress-bar {
+    height: 4px; background: #f1f5f9; border-radius: 999px; overflow: hidden;
+    width: 80px;
+  }
+  .progress-bar-fill {
+    height: 100%; background: linear-gradient(90deg, var(--b-purple) 0%, #A855F7 100%);
+    border-radius: 999px;
+  }
+
+  /* ===== V2 checklist cards · light pro ===== */
+  .v2-group { margin-bottom: 28px; }
+  .v2-group-header {
+    display: flex; align-items: center; gap: 10px;
+    font-size: 10px; font-weight: 800;
+    letter-spacing: 2px; color: var(--v2-text-muted);
+    text-transform: uppercase;
+    margin-bottom: 14px;
+    padding-left: 4px;
+  }
+  .v2-group-header .count {
+    background: white; color: var(--v2-brand);
+    padding: 3px 10px; border-radius: 999px; font-size: 10px;
+    border: 1px solid var(--v2-border);
+    font-weight: 800;
+  }
+  .v2-task-card {
+    background: var(--v2-surface);
+    border-radius: 14px;
+    padding: 14px 18px;
+    margin-bottom: 8px;
+    border: 1px solid var(--v2-border);
+    border-left-width: 4px;
+    display: grid;
+    grid-template-columns: auto 1fr auto auto;
+    gap: 14px;
+    align-items: center;
+    transition: all .25s cubic-bezier(.32,.72,0,1);
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 1px 2px rgba(124,58,237,0.04);
+  }
+  .v2-task-card::before {
+    content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 0;
+    background: linear-gradient(90deg, rgba(168,85,247,.08), transparent);
+    transition: width .35s ease;
+  }
+  .v2-task-card:hover::before { width: 65%; }
+  .v2-task-card:hover {
+    transform: translateX(4px);
+    border-color: var(--v2-border-strong);
+    box-shadow: 0 8px 24px rgba(124,58,237,0.10);
+  }
+  .v2-task-card.urgent { border-left-color: var(--v2-danger); background: linear-gradient(90deg, #FEF2F2 0%, white 30%); }
+  .v2-task-card.today { border-left-color: var(--v2-warn); background: linear-gradient(90deg, #FFFBEB 0%, white 30%); }
+  .v2-task-card.future { border-left-color: var(--v2-accent); }
+  .v2-task-card.urgent .priority-dot { background: var(--v2-danger); }
+  .v2-task-card.today .priority-dot { background: var(--v2-warn); }
+  .v2-task-card.future .priority-dot { background: var(--v2-accent); }
+
+  .priority-dot {
+    width: 10px; height: 10px; border-radius: 50%;
+    box-shadow: 0 0 0 4px rgba(0,0,0,0.04);
+    position: relative; z-index: 1;
+  }
+  .priority-dot.urgent { animation: pulse-glow 2s infinite; }
+  .v2-task-card .task-name {
+    font-size: 13px; font-weight: 600; color: var(--v2-text);
+    position: relative; z-index: 1;
+  }
+  .v2-task-card .task-meta {
+    font-size: 11px; color: var(--v2-text-muted);
+    margin-top: 2px;
+    position: relative; z-index: 1;
+  }
+
+  .v2-progress {
+    height: 5px; background: #F1F5F9; border-radius: 999px; overflow: hidden;
+    width: 80px;
+  }
+  .v2-progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--v2-brand) 0%, #EC4899 100%);
+    border-radius: 999px;
+    position: relative;
+  }
+  .v2-progress-fill::after {
+    content: ''; position: absolute; inset: 0;
+    background: linear-gradient(90deg, transparent 20%, rgba(255,255,255,0.5) 50%, transparent 80%);
+    background-size: 200% 100%;
+    animation: shimmer-line 2.5s linear infinite;
+  }
+
+  /* ===== SEMÁFORO V2 ===== */
+  .semaforo-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+  .depto-tile-v2 {
+    background: var(--v2-surface);
+    border: 1px solid var(--v2-border);
+    border-top: 4px solid;
+    border-radius: 14px;
+    padding: 14px;
+    cursor: pointer;
+    transition: all .25s cubic-bezier(.32,.72,0,1);
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 1px 2px rgba(124,58,237,0.04);
+  }
+  .depto-tile-v2::after {
+    content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 1px;
+    background: linear-gradient(90deg, transparent, currentColor, transparent);
+    opacity: 0.4;
+  }
+  .depto-tile-v2:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 28px rgba(124,58,237,0.12);
+  }
+  .depto-tile-v2 .name { font-size: 11px; font-weight: 700; color: var(--v2-text-dim); letter-spacing: 0.5px; text-transform: uppercase; }
+  .depto-tile-v2 .pct {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 28px; font-weight: 800;
+    margin-top: 8px;
+    letter-spacing: -1px;
+  }
+  .depto-tile-v2 .sub { font-size: 10px; color: var(--v2-text-muted); margin-top: 4px; }
+
+  /* ===== HEADERS ===== */
+  .page-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 24px; gap: 16px; flex-wrap: wrap; }
+  body[data-mode="v1"] .breadcrumb { font-size: 12px; color: #94a3b8; margin-bottom: 8px; }
+  body[data-mode="v2"] .breadcrumb,
+  body[data-mode="compare"] .breadcrumb,
+  body[data-mode="audit"] .breadcrumb {
+    font-size: 11px; color: var(--v2-text-muted);
+    margin-bottom: 8px; letter-spacing: 1px;
+    text-transform: uppercase; font-weight: 700;
+  }
+  body[data-mode="v1"] .page-title { font-size: 28px; font-weight: 800; color: #0f172a; }
+  body[data-mode="v2"] .page-title,
+  body[data-mode="compare"] .page-title,
+  body[data-mode="audit"] .page-title { font-size: 32px; letter-spacing: -0.8px; }
+
+  body[data-mode="v1"] .greeting { font-size: 13px; color: #64748b; }
+  body[data-mode="v2"] .greeting,
+  body[data-mode="compare"] .greeting,
+  body[data-mode="audit"] .greeting { font-size: 13px; color: var(--v2-text-dim); font-weight: 500; }
+
+  /* ===== FILTERS BAR V2 ===== */
+  body[data-mode="v2"] .filters-bar {
+    display: flex; gap: 6px; align-items: center; margin-bottom: 24px;
+    background: var(--v2-surface); padding: 8px 12px;
+    border-radius: 14px;
+    border: 1px solid var(--v2-border);
+    flex-wrap: wrap;
+    box-shadow: 0 1px 2px rgba(124,58,237,0.04);
+  }
+  body[data-mode="v1"] .filters-bar {
+    display: flex; gap: 8px; align-items: center; margin-bottom: 24px;
+    background: white; padding: 8px;
+    border-radius: 12px;
+    box-shadow: 0 1px 3px rgba(0,0,0,.04);
+  }
+
+  /* ===== WARROOM BANNER (transparente glass) ===== */
+  .warroom-banner {
+    background: rgba(255,255,255,0.35);
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    border-radius: 16px;
+    padding: 14px 22px;
+    margin: 0 0 24px;
+    border: 1px solid rgba(168,85,247,0.18);
+    display: flex; align-items: center; justify-content: space-between;
+    flex-wrap: wrap; gap: 12px;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 4px 20px rgba(168,85,247,0.06);
+  }
+  .warroom-banner::before {
+    content: ''; position: absolute; top: 0; left: -100%;
+    width: 100%; height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.5), transparent);
+    animation: shimmer-line 8s linear infinite;
+  }
+  .warroom-banner .title {
+    font-size: 11px; font-weight: 800; letter-spacing: 1.5px;
+    margin-bottom: 4px;
+    background: linear-gradient(135deg, var(--v2-brand), #EC4899);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    text-transform: uppercase;
+  }
+  .warroom-banner .subtitle { font-size: 13px; color: var(--v2-text); font-weight: 600; opacity: 0.85; }
+  .agent-chip {
+    display: inline-flex; align-items: center; gap: 4px;
+    background: rgba(255,255,255,0.7);
+    padding: 5px 11px; border-radius: 999px;
+    font-size: 11px; font-weight: 700; color: var(--v2-text-dim);
+    border: 1px solid rgba(168,85,247,0.18);
+    transition: all .2s ease;
+    backdrop-filter: blur(10px);
+  }
+  .agent-chip:hover {
+    background: linear-gradient(135deg, #F3E8FF 0%, #FCE7F3 100%);
+    color: var(--v2-brand);
+    border-color: var(--v2-brand);
+    transform: translateY(-1px);
+  }
+
+  /* ===== FAB RADAR (estilo LEMPAR · centrado bottom) ===== */
+  .fab-radar {
+    position: fixed; bottom: 28px; left: 50%; transform: translateX(-50%);
+    width: 60px; height: 60px; border-radius: 50%;
+    background: linear-gradient(135deg, var(--v2-brand) 0%, #EC4899 100%);
+    color: white;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 26px;
+    cursor: pointer; z-index: 45;
+    border: none;
+    box-shadow: 0 8px 28px rgba(124,58,237,0.45), 0 0 0 4px rgba(255,255,255,0.6);
+    transition: all .3s cubic-bezier(.32,.72,0,1);
+  }
+  .fab-radar:hover {
+    transform: translateX(-50%) scale(1.08);
+    box-shadow: 0 12px 36px rgba(124,58,237,0.6), 0 0 0 4px rgba(255,255,255,0.7);
+  }
+  .fab-radar:active { transform: translateX(-50%) scale(0.95); }
+  .fab-radar::before, .fab-radar::after {
+    content: ''; position: absolute; inset: -4px;
+    border-radius: 50%;
+    border: 2px solid var(--v2-brand);
+    opacity: 0;
+    animation: radar-pulse 2.4s cubic-bezier(0,.2,.8,1) infinite;
+    pointer-events: none;
+  }
+  .fab-radar::after { animation-delay: 1.2s; border-color: #EC4899; }
+  @keyframes radar-pulse {
+    0% { transform: scale(0.9); opacity: 0.9; }
+    100% { transform: scale(2.4); opacity: 0; }
+  }
+  .fab-radar-tooltip {
+    position: absolute; bottom: 100%; left: 50%; transform: translateX(-50%);
+    margin-bottom: 14px;
+    background: var(--v2-text); color: white;
+    padding: 8px 14px; border-radius: 10px;
+    font-size: 11px; font-weight: 600;
+    white-space: nowrap;
+    opacity: 0; pointer-events: none;
+    transition: opacity .25s ease, transform .25s ease;
+    transform: translateX(-50%) translateY(6px);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.18);
+  }
+  .fab-radar-tooltip::after {
+    content: ''; position: absolute; top: 100%; left: 50%; transform: translateX(-50%);
+    border: 6px solid transparent; border-top-color: var(--v2-text);
+  }
+  .fab-radar:hover .fab-radar-tooltip {
+    opacity: 1; transform: translateX(-50%) translateY(0);
+  }
+
+  /* ===== HISTORIAL LATERAL (paleta Bendito) ===== */
+  .historial-tab {
+    position: fixed; right: 0; top: 50%; transform: translateY(-50%);
+    background: linear-gradient(135deg, var(--v2-brand) 0%, #EC4899 100%);
+    color: white;
+    padding: 20px 12px; border-radius: 14px 0 0 14px;
+    writing-mode: vertical-rl; text-orientation: mixed;
+    cursor: pointer; z-index: 55; font-size: 13px; letter-spacing: 2px;
+    box-shadow: -6px 0 24px rgba(124,58,237,.35);
+    transition: all .3s cubic-bezier(.32,.72,0,1);
+    display: flex; flex-direction: column-reverse; align-items: center; gap: 12px;
+    font-weight: 700;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+  }
+  .historial-tab:hover {
+    background: linear-gradient(135deg, #EC4899 0%, var(--v2-brand) 100%);
+    padding-right: 18px;
+    box-shadow: -8px 0 28px rgba(124,58,237,.5);
+  }
+  .historial-badge {
+    background: white; color: var(--v2-brand);
+    border-radius: 999px; padding: 3px 11px; font-weight: 800;
+    writing-mode: horizontal-tb; font-size: 13px;
+    box-shadow: 0 2px 8px rgba(0,0,0,.15);
+  }
+
+  .modal-versiones {
+    position: fixed; top: 0; right: -540px; width: 520px; max-width: 100vw; height: 100vh;
+    background: var(--v2-bg);
+    box-shadow: -16px 0 48px rgba(124,58,237,.18);
+    transition: right .4s cubic-bezier(.32,.72,0,1); z-index: 100; overflow-y: auto;
+    color: var(--v2-text);
+  }
+  .modal-versiones.open { right: 0; }
+  .modal-overlay {
+    position: fixed; inset: 0; background: rgba(30,27,46,0.4);
+    backdrop-filter: blur(8px); z-index: 99;
+    opacity: 0; pointer-events: none; transition: opacity .3s ease;
+  }
+  .modal-overlay.open { opacity: 1; pointer-events: auto; }
+  .modal-header {
+    background: linear-gradient(135deg, var(--v2-brand) 0%, #EC4899 50%, #F472B6 100%);
+    color: white; padding: 28px 24px;
+    position: relative; overflow: hidden;
+  }
+  .modal-header::before {
+    content: ''; position: absolute; inset: 0;
+    background: radial-gradient(circle at 80% 50%, rgba(255,255,255,0.15), transparent 50%);
+  }
+
+  .version-card-modal {
+    background: var(--v2-surface);
+    border: 2px solid var(--v2-border);
+    border-radius: 14px;
+    padding: 18px;
+    margin: 12px 20px;
+    cursor: pointer;
+    transition: all .25s cubic-bezier(.32,.72,0,1);
+    position: relative;
+    box-shadow: 0 2px 8px rgba(124,58,237,0.06);
+  }
+  .version-card-modal:hover {
+    border-color: var(--v2-brand);
+    transform: translateX(-6px);
+    box-shadow: -6px 6px 16px rgba(124,58,237,0.12);
+  }
+  .version-card-modal.current {
+    border-color: var(--v2-brand);
+    background: linear-gradient(135deg, #F3E8FF 0%, #FCE7F3 100%);
+  }
+  .version-card-modal.viewing {
+    border-color: #EC4899;
+    background: linear-gradient(135deg, #FCE7F3 0%, #FBCFE8 100%);
+  }
+  .version-card-modal .vc-title {
+    font-size: 14px; font-weight: 800; color: var(--v2-text);
+    font-family: 'Plus Jakarta Sans', sans-serif;
+  }
+  .version-card-modal .vc-desc {
+    font-size: 12px; color: var(--v2-text-dim); margin-top: 4px;
+  }
+  .vc-actions { display: flex; gap: 6px; margin-top: 14px; flex-wrap: wrap; }
+  .vc-btn {
+    font-size: 11px; padding: 6px 12px; border-radius: 8px;
+    background: white;
+    border: 1px solid var(--v2-border);
+    color: var(--v2-text-dim);
+    cursor: pointer; font-weight: 700;
+    transition: all .2s ease;
+    font-family: 'Inter', sans-serif;
+  }
+  .vc-btn:hover {
+    background: linear-gradient(135deg, #F3E8FF 0%, #FCE7F3 100%);
+    border-color: var(--v2-brand);
+    color: var(--v2-brand);
+  }
+  .vc-btn.primary {
+    background: linear-gradient(135deg, var(--v2-brand) 0%, #EC4899 100%);
+    color: white;
+    border-color: var(--v2-brand);
+    box-shadow: 0 2px 8px rgba(124,58,237,0.25);
+  }
+
+  /* ===== SECTION TABS (comparativa + audit) ===== */
+  .section-tabs {
+    display: flex; gap: 4px; padding: 6px;
+    background: var(--v2-surface);
+    border: 1px solid var(--v2-border);
+    border-radius: 14px;
+    margin-bottom: 24px;
+    overflow-x: auto;
+    position: sticky; top: 36px; z-index: 30;
+    backdrop-filter: blur(20px);
+    box-shadow: 0 4px 12px rgba(124,58,237,0.06);
+  }
+  .section-tab {
+    padding: 9px 16px; border-radius: 10px;
+    font-size: 12px; font-weight: 600;
+    color: var(--v2-text-dim);
+    cursor: pointer;
+    transition: all .25s cubic-bezier(.32,.72,0,1);
+    white-space: nowrap;
+    display: flex; align-items: center; gap: 6px;
+    border: 1px solid transparent;
+  }
+  .section-tab:hover {
+    background: rgba(168,85,247,.08);
+    color: var(--v2-brand);
+  }
+  .section-tab.active {
+    background: linear-gradient(135deg, #F3E8FF 0%, #FCE7F3 100%);
+    color: var(--v2-brand);
+    border-color: rgba(168,85,247,.4);
+    box-shadow: 0 2px 12px rgba(168,85,247,.18);
+    font-weight: 700;
+  }
+  .section-tab .badge {
+    font-size: 9px; padding: 2px 6px;
+    border-radius: 4px; background: white;
+    font-weight: 800;
+    border: 1px solid var(--v2-border);
+  }
+  .section-tab.bad .badge { background: #FEE2E2; color: var(--v2-danger); border-color: #FCA5A5; }
+  .section-tab.warn .badge { background: #FEF3C7; color: #92400E; border-color: #FCD34D; }
+  .section-tab.ok .badge { background: #D1FAE5; color: #065F46; border-color: #6EE7B7; }
+
+  /* ===== COMPARATIVA PANES ===== */
+  .compare-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+  .compare-pane {
+    border-radius: 16px;
+    padding: 24px;
+    min-height: 500px;
+    transition: all .4s cubic-bezier(.32,.72,0,1);
+  }
+  .compare-pane.v1 {
+    background: white;
+    border: 2px dashed #cbd5e1;
+    color: #1e293b;
+  }
+  .compare-pane.v2 {
+    background: linear-gradient(135deg, #FFFFFF 0%, #FBF7FF 100%);
+    border: 2px solid var(--v2-brand);
+    box-shadow: 0 12px 40px rgba(124,58,237,.15);
+  }
+  .compare-label {
+    font-size: 10px; font-weight: 800; letter-spacing: 2px;
+    text-transform: uppercase; margin-bottom: 14px;
+    padding: 5px 12px; border-radius: 6px; display: inline-block;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+  }
+  .compare-label.v1 { background: #f1f5f9; color: #64748b; }
+  .compare-label.v2 {
+    background: linear-gradient(135deg, var(--v2-brand) 0%, #EC4899 100%);
+    color: white;
+  }
+  @media (max-width: 1024px) { .compare-grid { grid-template-columns: 1fr; } }
+
+  /* ===== AUDIT ===== */
+  .audit-section { background: var(--v2-surface); border: 1px solid var(--v2-border); border-radius: 16px; padding: 24px; margin-bottom: 16px; box-shadow: 0 2px 8px rgba(124,58,237,0.04); }
+  .audit-section h3 { color: var(--v2-text); font-size: 18px; margin-bottom: 12px; font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 800; }
+  .audit-table { width: 100%; border-collapse: collapse; }
+  .audit-table th {
+    background: #FBF7FF; padding: 12px 16px; text-align: left;
+    font-size: 10px; font-weight: 800; color: var(--v2-text-muted);
+    letter-spacing: 1.5px; text-transform: uppercase;
+    border-bottom: 1px solid var(--v2-border);
+  }
+  .audit-table td {
+    padding: 14px 16px; border-bottom: 1px solid var(--v2-border);
+    font-size: 13px; color: var(--v2-text);
+  }
+  .audit-table tr.bad td { background: #FEF2F2; }
+  .audit-table tr:hover td { background: #FBF7FF; }
+
+  .badge { padding: 3px 10px; border-radius: 999px; font-size: 10px; font-weight: 800; letter-spacing: 0.3px; }
+  .badge.ok { background: #D1FAE5; color: #065F46; border: 1px solid #6EE7B7; }
+  .badge.warn { background: #FEF3C7; color: #92400E; border: 1px solid #FCD34D; }
+  .badge.bad { background: #FEE2E2; color: #991B1B; border: 1px solid #FCA5A5; }
+
+  /* ===== VOICES ===== */
+  .voice-card {
+    background: var(--v2-surface);
+    border: 1px solid var(--v2-border);
+    border-left: 4px solid var(--v2-brand);
+    border-radius: 12px;
+    padding: 16px 20px;
+    margin-bottom: 10px;
+    transition: all .25s ease;
+    box-shadow: 0 1px 2px rgba(124,58,237,0.04);
+  }
+  .voice-card:hover {
+    border-left-color: #EC4899;
+    transform: translateX(2px);
+    box-shadow: 0 8px 20px rgba(124,58,237,0.10);
+  }
+  .voice-header { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
+  .voice-name {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px; font-weight: 700; color: var(--v2-text);
+  }
+  .voice-skill {
+    font-size: 10px;
+    background: linear-gradient(135deg, #F3E8FF 0%, #FCE7F3 100%);
+    color: var(--v2-brand);
+    padding: 2px 8px; border-radius: 4px;
+    border: 1px solid rgba(168,85,247,.25);
+    font-family: 'JetBrains Mono', monospace;
+    font-weight: 700;
+  }
+  .voice-text { font-size: 13px; color: var(--v2-text-dim); line-height: 1.6; }
+
+  /* ===== COLA ===== */
+  .cola-box {
+    background: #1E1B2E;
+    border: 1px solid #2D2940;
+    border-radius: 14px;
+    padding: 20px 24px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    box-shadow: 0 8px 24px rgba(30,27,46,0.15);
+  }
+  .cola-row { color: #B4ADC9; padding: 6px 0; }
+  .cola-row .tag { font-weight: 800; }
+  .cola-row .bar { color: #5C5673; margin: 0 8px; letter-spacing: 1px; }
+  .cola-row .bar.done { color: var(--v2-accent); }
+  .cola-row .bar.todo { color: var(--v2-warn); }
+
+  /* ===== EMPTY STATES V2 ===== */
+  .empty-v2 {
+    background: linear-gradient(135deg, #FFFFFF 0%, #FBF7FF 100%);
+    border: 2px dashed var(--v2-border-strong);
+    border-radius: 16px;
+    text-align: center; padding: 60px 24px;
+  }
+
+  /* ===== CALENDAR V2 ===== */
+  .cal-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 6px; }
+  .cal-cell {
+    aspect-ratio: 1; padding: 8px; border-radius: 10px;
+    font-size: 12px; position: relative; transition: all .2s ease;
+    cursor: pointer;
+  }
+  body[data-mode="v1"] .cal-cell { background: white; color: #1e293b; }
+  body[data-mode="v2"] .cal-cell {
+    background: var(--v2-surface);
+    border: 1px solid var(--v2-border);
+    color: var(--v2-text-dim);
+  }
+  .cal-cell:hover { transform: scale(1.05); z-index: 2; }
+  body[data-mode="v2"] .cal-cell:hover { border-color: var(--v2-brand); color: var(--v2-brand); background: #F3E8FF; }
+  .cal-cell.has-events::after {
+    content: ''; position: absolute; bottom: 6px; left: 50%; transform: translateX(-50%);
+    width: 20px; height: 3px; border-radius: 2px;
+    background: linear-gradient(90deg, var(--v2-brand), var(--v2-accent));
+  }
+  body[data-mode="v1"] .cal-cell.today {
+    background: linear-gradient(135deg, #f3e8ff 0%, #fce7f3 100%);
+    color: var(--b-purple); font-weight: 700;
+  }
+  body[data-mode="v2"] .cal-cell.today {
+    background: linear-gradient(135deg, #F3E8FF 0%, #FCE7F3 100%);
+    color: var(--v2-brand); font-weight: 800;
+    border-color: var(--v2-brand);
+    box-shadow: 0 2px 8px rgba(124,58,237,0.18);
+  }
+
+  /* ===== ERROR 404 ===== */
+  .error-404 { text-align: center; padding: 100px 20px; }
+  .error-404 h1 {
+    font-size: 120px; font-weight: 900; line-height: 1;
+    color: #EF4444;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+  }
+
+  /* warroom-indicator removed · replaced by .fab-radar */
+
+  /* ===== SECTION TITLES ===== */
+  .section-title {
+    font-size: 10px; font-weight: 700; letter-spacing: 2px;
+    text-transform: uppercase;
+    margin: 28px 0 14px;
+  }
+  body[data-mode="v1"] .section-title { color: #94a3b8; }
+  body[data-mode="v2"] .section-title { color: var(--v2-text-muted); }
+
+  /* improvement badge */
+  .imp-badge {
+    background: linear-gradient(135deg, var(--v2-brand) 0%, var(--v2-accent) 100%);
+    color: white; font-size: 9px; padding: 3px 8px; border-radius: 999px;
+    font-weight: 700; letter-spacing: 0.5px;
+    box-shadow: 0 4px 12px rgba(123,104,238,.3);
+  }
+</style>
+</head>
+<body data-mode="v2">
+
+<!-- Mode banner top -->
+<div class="mode-banner" id="modeBanner">
+  <span id="modeBannerText">⚡ Viendo V2 · Versión Evolucionada War Room SMC · ClickUp Pro inspired</span>
+</div>
+
+<!-- Tab historial -->
+<div class="historial-tab" onclick="toggleVersions()">
+  <span class="historial-badge" id="versionBadge">v2</span>
+  HISTORIAL · VERSIONES
+</div>
+
+<!-- Overlay -->
+<div class="modal-overlay" id="modalOverlay" onclick="toggleVersions()"></div>
+
+<!-- Modal versiones -->
+<div class="modal-versiones" id="modalVersiones">
+  <div class="modal-header">
+    <div class="flex justify-between items-start" style="position:relative;z-index:1;">
+      <div>
+        <h2 style="font-size:20px;font-weight:800;font-family:'Plus Jakarta Sans',sans-serif;">Historial</h2>
+        <p style="font-size:11px;opacity:.85;margin-top:3px;letter-spacing:2px;font-weight:600;">BENDITO CAPRICHO · WAR ROOM</p>
+      </div>
+      <button onclick="toggleVersions()" style="background:none;border:none;color:white;font-size:28px;cursor:pointer;line-height:1;padding:0;">×</button>
+    </div>
+    <p style="font-size:11px;opacity:.75;margin-top:14px;position:relative;z-index:1;">Click en una versión · ESC para cerrar</p>
+  </div>
+
+  <div class="version-card-modal current" id="card-v2" onclick="setMode('v2')">
+    <div style="display:flex;justify-content:space-between;align-items:start;margin-bottom:10px;">
+      <span style="background:linear-gradient(135deg,var(--v2-brand),var(--v2-accent));color:white;font-size:11px;padding:3px 9px;border-radius:6px;font-weight:800;">v2</span>
+      <span style="font-size:11px;color:var(--v2-text-muted);">2026-05-15 09:32</span>
+    </div>
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;">
+      <div style="width:30px;height:30px;border-radius:8px;background:linear-gradient(135deg,var(--v2-brand),var(--v2-accent));color:white;font-size:10px;display:flex;align-items:center;justify-content:center;font-weight:800;">SMC</div>
+      <span class="vc-title">War Room SMC · evolución</span>
+    </div>
+    <p class="vc-desc">Versión evolucionada · paleta ClickUp Pro · sidebar dark · Inter · glassmorphism · navegación por sección</p>
+    <div class="vc-actions">
+      <button class="vc-btn primary" onclick="event.stopPropagation(); setMode('v2')">Viendo</button>
+      <button class="vc-btn" onclick="event.stopPropagation(); setMode('compare')">Comparar</button>
+      <button class="vc-btn" onclick="event.stopPropagation(); setMode('audit')">Auditoría</button>
+    </div>
+  </div>
+
+  <div class="version-card-modal" id="card-v1" onclick="setMode('v1')">
+    <div style="display:flex;justify-content:space-between;align-items:start;margin-bottom:10px;">
+      <span style="background:#475569;color:white;font-size:11px;padding:3px 9px;border-radius:6px;font-weight:800;">v1</span>
+      <span style="font-size:11px;color:var(--v2-text-muted);">2026-05-14 18:32</span>
+    </div>
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;">
+      <div style="width:30px;height:30px;border-radius:8px;background:#3b82f6;color:white;font-size:10px;display:flex;align-items:center;justify-content:center;font-weight:800;">S</div>
+      <span class="vc-title">Sergio Gary · Crealo SpA</span>
+    </div>
+    <p class="vc-desc">QAS actual · 14 flujos PDF · 3 P0 visibles: /usuarios 404 · /tablero fantasma · auth ambigua</p>
+    <div class="vc-actions">
+      <button class="vc-btn" onclick="event.stopPropagation(); setMode('v1')">Ver v1</button>
+      <button class="vc-btn" onclick="event.stopPropagation(); setMode('compare')">Comparar</button>
+    </div>
+  </div>
+
+  <div style="padding:8px 20px 20px;">
+    <div class="section-title" style="color:var(--v2-text-muted);">Vistas globales</div>
+    <div class="vc-actions">
+      <button class="vc-btn" onclick="setMode('compare')">📊 Comparativa</button>
+      <button class="vc-btn" onclick="setMode('audit')">🔍 Auditoría</button>
+    </div>
+  </div>
+
+  <div style="padding:16px 20px;background:rgba(255,255,255,0.02);margin-top:8px;">
+    <div class="section-title" style="color:var(--v2-text-muted);margin-top:0;">Cola Sentinela</div>
+    <div style="font-family:'JetBrains Mono',monospace;font-size:11px;line-height:1.8;color:var(--v2-text-dim);">
+      <div>🔴 P0 · 3 fixes pendientes</div>
+      <div>🟡 P1 · 3 UX críticas</div>
+      <div>🔵 P2 · 3 mejoras valor</div>
+      <div>🟣 P3 · versionado lateral ✅</div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== APP SHELL ===== -->
+<div class="bendito-shell">
+
+  <!-- SIDEBAR (solo en v1 y v2) -->
+  <aside class="sidebar" id="sidebar">
+    <!-- Logo V1 -->
+    <div class="logo-bendito-v1 v1-only" style="display:none;">
+      <div class="name">bendito<span style="color:#ec4899">♥</span></div>
+      <div class="name" style="font-size:18px;margin-top:-4px;">capricho</div>
+      <div class="tag">— concept store —</div>
+    </div>
+
+    <!-- Logo V2 -->
+    <div class="logo-bendito-v2 v2-only">
+      <div class="icon">B</div>
+      <div class="text">
+        <div class="name">Bendito Capricho</div>
+        <div class="tag">SUPERVISIÓN · PRO</div>
+      </div>
+    </div>
+
+    <!-- User chip -->
+    <div class="v1-only" style="padding:12px 8px;border-bottom:1px solid rgba(168,85,247,0.1);margin-bottom:12px;">
+      <p style="font-size:13px;font-weight:700;color:var(--b-purple);font-style:italic;">¡Hola! Daniel</p>
+      <p style="font-size:11px;color:#94a3b8;">Dueña</p>
+    </div>
+    <div class="v2-only" style="padding:12px;background:linear-gradient(135deg,#F3E8FF 0%,#FCE7F3 100%);border:1px solid var(--v2-border);border-radius:12px;margin-bottom:14px;">
+      <div style="display:flex;align-items:center;gap:10px;">
+        <div style="width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,var(--v2-brand),#EC4899);color:white;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800;box-shadow:0 4px 12px rgba(124,58,237,0.25);">D</div>
+        <div>
+          <div style="font-size:13px;font-weight:800;color:var(--v2-text);">Daniel</div>
+          <div style="font-size:10px;color:var(--v2-brand);text-transform:uppercase;letter-spacing:1.5px;font-weight:800;">DUEÑA</div>
+        </div>
+      </div>
+    </div>
+
+    <nav>
+      <div class="sidebar-link active" data-page="mi-dia" onclick="goPage('mi-dia', this)"><span>☀️</span> Mi Día</div>
+      <div class="sidebar-link" data-page="dashboard" onclick="goPage('dashboard', this)"><span>📊</span> Dashboard</div>
+      <div class="sidebar-link v1-only broken" data-page="tablero-broken" onclick="goPage('tablero-broken', this)"><span>🃏</span> Tablero</div>
+      <div class="sidebar-link v2-only" data-page="tablero" onclick="goPage('tablero', this)"><span>🃏</span> Tablero <span style="margin-left:auto;font-size:9px;background:linear-gradient(135deg,#F3E8FF,#FCE7F3);color:var(--v2-brand);padding:2px 7px;border-radius:5px;font-weight:800;border:1px solid rgba(168,85,247,0.25);">KANBAN</span></div>
+      <div class="sidebar-link" data-page="calendario" onclick="goPage('calendario', this)"><span>📅</span> Calendario</div>
+      <div class="sidebar-link" data-page="emprendedores" onclick="goPage('emprendedores', this)"><span>🛍️</span> Emprendedores</div>
+      <div class="sidebar-link" data-page="reportes" onclick="goPage('reportes', this)"><span>📈</span> Reportes</div>
+      <div class="sidebar-link v1-only broken" data-page="usuarios-broken" onclick="goPage('usuarios-broken', this)"><span>👥</span> Usuarios</div>
+      <div class="sidebar-link v2-only" data-page="usuarios" onclick="goPage('usuarios', this)"><span>👥</span> Usuarios</div>
+    </nav>
+  </aside>
+
+  <!-- ===== MAIN ===== -->
+  <main class="main">
+
+    <!-- War Room banner -->
+    <div class="warroom-banner v2-only">
+      <div>
+        <div class="title">🧠 WAR ROOM SMC · v2 evolucionada</div>
+        <div class="subtitle">6 agentes contribuyeron · 18 mejoras aplicadas sobre v1 de Sergio</div>
+      </div>
+      <div style="display:flex;gap:6px;flex-wrap:wrap;">
+        <span class="agent-chip">🐕 BA</span>
+        <span class="agent-chip">🎨 Frontend</span>
+        <span class="agent-chip">🔧 Backend</span>
+        <span class="agent-chip">👩 QAS</span>
+        <span class="agent-chip">🚀 PRM</span>
+        <span class="agent-chip">🧠 Cerebro</span>
+      </div>
+    </div>
+
+    <!-- ============================== -->
+    <!-- PÁGINA MI DÍA -->
+    <!-- ============================== -->
+    <div class="view active" id="page-mi-dia">
+
+      <div class="breadcrumb">Inicio › Mi Día</div>
+      <div class="page-header">
+        <div>
+          <h1 class="page-title v1-only">Buenas noches, Daniel</h1>
+          <h1 class="page-title v2-only">Buenas noches, Daniel ⚡</h1>
+          <p class="greeting">jueves, 14 de mayo de 2026</p>
+        </div>
+        <div class="v2-only">
+          <button class="pill active" style="padding:10px 22px;font-size:13px;">▶ Empezar mi día</button>
+        </div>
+      </div>
+
+      <!-- V1 filtros planos -->
+      <div class="v1-only" style="margin-bottom:24px;display:flex;gap:8px;flex-wrap:wrap;">
+        <span class="pill active">Todo</span>
+        <span class="pill">🏪 Bendito Capricho</span>
+        <span class="pill">🎉 Eventos</span>
+        <span class="pill">🌐 Web</span>
+      </div>
+
+      <!-- V2 filtros segmented -->
+      <div class="v2-only filters-bar">
+        <span style="font-size:10px;font-weight:700;color:var(--v2-text-muted);letter-spacing:1.5px;margin-right:6px;">ÁREA</span>
+        <span class="pill active">Todo</span>
+        <span class="pill">🏪 Bendito</span>
+        <span class="pill">🎉 Eventos</span>
+        <span class="pill">🌐 Web</span>
+        <div style="width:1px;background:var(--v2-border);height:24px;margin:0 8px;"></div>
+        <span style="font-size:10px;font-weight:700;color:var(--v2-text-muted);letter-spacing:1.5px;margin-right:6px;">TIENDA</span>
+        <span class="pill active">Todas</span>
+        <span class="pill">📍 Quilpué</span>
+        <span class="pill">📍 San Antonio</span>
+      </div>
+
+      <!-- KPIs V1 -->
+      <div class="v1-only" style="display:flex;gap:12px;margin-bottom:24px;">
+        <div class="kpi-tile" style="flex:0 1 auto;">
+          <div class="kpi-num warn">12</div>
+          <div style="font-size:11px;color:#64748b;margin-top:4px;">checklists pendientes</div>
+        </div>
+        <div class="kpi-tile" style="flex:0 1 auto;">
+          <div class="kpi-num warn">3</div>
+          <div style="font-size:11px;color:#64748b;margin-top:4px;">tareas activas</div>
+        </div>
+        <div class="kpi-tile" style="flex:0 1 auto;">
+          <div class="kpi-num danger">0%</div>
+          <div style="font-size:11px;color:#64748b;margin-top:4px;">completado ayer</div>
+        </div>
+      </div>
+
+      <!-- KPIs V2 con sparklines -->
+      <div class="v2-only stagger" style="display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:28px;">
+        <div class="kpi-tile">
+          <div style="display:flex;justify-content:space-between;align-items:start;">
+            <div><div class="kpi-num warn">12</div><div class="label">checklists pendientes</div></div>
+            <span style="font-size:10px;background:rgba(255,183,77,.15);color:var(--v2-warn);padding:3px 7px;border-radius:4px;border:1px solid rgba(255,183,77,.3);font-weight:700;">+3 ayer</span>
+          </div>
+        </div>
+        <div class="kpi-tile">
+          <div style="display:flex;justify-content:space-between;align-items:start;">
+            <div><div class="kpi-num warn">3</div><div class="label">tareas activas</div></div>
+            <span style="font-size:10px;background:rgba(78,205,196,.15);color:var(--v2-info);padding:3px 7px;border-radius:4px;border:1px solid rgba(78,205,196,.3);font-weight:700;">↑ 1</span>
+          </div>
+        </div>
+        <div class="kpi-tile">
+          <div style="display:flex;justify-content:space-between;align-items:start;">
+            <div><div class="kpi-num danger">0%</div><div class="label">completado ayer</div></div>
+            <span style="font-size:10px;background:rgba(255,92,124,.15);color:var(--v2-danger);padding:3px 7px;border-radius:4px;border:1px solid rgba(255,92,124,.3);font-weight:700;">-12% sem</span>
+          </div>
+        </div>
+        <div class="kpi-tile" style="background:linear-gradient(135deg,#F3E8FF 0%,#FCE7F3 100%);border-color:var(--v2-brand);">
+          <div>
+            <div style="font-family:'Plus Jakarta Sans',sans-serif;font-size:34px;font-weight:800;background:linear-gradient(135deg,var(--v2-brand),#EC4899);-webkit-background-clip:text;-webkit-text-fill-color:transparent;letter-spacing:-1px;">68%</div>
+            <div class="label">semana promedio</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- V1 lista plana -->
+      <div class="v1-only">
+        <div class="section-title">Mis checklists de hoy</div>
+        <div class="stagger">
+          <div class="v1-checklist-row"><span style="font-size:13px;">Checklist Diario Gerencia — 2026-05-14</span><span style="font-size:11px;color:#64748b;">0% Pendiente</span></div>
+          <div class="v1-checklist-row"><span style="font-size:13px;">DMs Instagram Diario Comercial — 2026-05-14</span><span style="font-size:11px;color:#64748b;">0% Pendiente</span></div>
+          <div class="v1-checklist-row"><span style="font-size:13px;">Checklist Diario Finanzas — 2026-05-14</span><span style="font-size:11px;color:#64748b;">0% Pendiente</span></div>
+          <div class="v1-checklist-row"><span style="font-size:13px;">RRSS Diario Marketing — 2026-05-14</span><span style="font-size:11px;color:#64748b;">0% Pendiente</span></div>
+          <div class="v1-checklist-row"><span style="font-size:13px;">Cierres Caja Semanal Admin — 2026-05-14</span><span style="font-size:11px;color:#64748b;">0% Pendiente</span></div>
+          <div class="v1-checklist-row"><span style="font-size:13px;">Apertura Diaria - Quilpué — 2026-05-14</span><span style="font-size:11px;color:#64748b;">0% Pendiente</span></div>
+          <div class="v1-checklist-row"><span style="font-size:13px;">Cierre Diario - Quilpué — 2026-05-14</span><span style="font-size:11px;color:#64748b;">0% Pendiente</span></div>
+          <div class="v1-checklist-row"><span style="font-size:13px;">Asistencia Diaria Admin — 2026-05-14</span><span style="font-size:11px;color:#64748b;">0% Pendiente</span></div>
+          <div class="v1-checklist-row"><span style="font-size:13px;">Recepción Documentos Diario Inv — 2026-05-14</span><span style="font-size:11px;color:#64748b;">0% Pendiente</span></div>
+          <div class="v1-checklist-row"><span style="font-size:13px;">Cierre Diario - San Antonio — 2026-05-14</span><span style="font-size:11px;color:#64748b;">0% Pendiente</span></div>
+          <div class="v1-checklist-row"><span style="font-size:13px;">Plataformas Diario LogWeb — 2026-05-14</span><span style="font-size:11px;color:#64748b;">0% Pendiente</span></div>
+          <div class="v1-checklist-row"><span style="font-size:13px;">Apertura Diaria - San Antonio — 2026-05-14</span><span style="font-size:11px;color:#64748b;">0% Pendiente</span></div>
+        </div>
+      </div>
+
+      <!-- V2 agrupado prioridad cromática -->
+      <div class="v2-only">
+
+        <div class="v2-group">
+          <div class="v2-group-header"><span class="priority-dot urgent"></span>URGENTE · vencido o crítico hoy<span class="count">3</span></div>
+          <div class="stagger">
+            <div class="v2-task-card urgent">
+              <span style="font-size:18px;">🔴</span>
+              <div><div class="task-name">Apertura Diaria · Quilpué</div><div class="task-meta">📍 Quilpué · antes 10:00 · Líder Tienda</div></div>
+              <div class="v2-progress"><div class="v2-progress-fill" style="width:5%;"></div></div>
+              <span style="font-size:11px;color:var(--v2-danger);font-weight:700;">0/8</span>
+            </div>
+            <div class="v2-task-card urgent">
+              <span style="font-size:18px;">🔴</span>
+              <div><div class="task-name">Apertura Diaria · San Antonio</div><div class="task-meta">📍 San Antonio · pendiente 09:30 · Líder</div></div>
+              <div class="v2-progress"><div class="v2-progress-fill" style="width:5%;"></div></div>
+              <span style="font-size:11px;color:var(--v2-danger);font-weight:700;">0/8</span>
+            </div>
+            <div class="v2-task-card urgent">
+              <span style="font-size:18px;">🔴</span>
+              <div><div class="task-name">Cierres Caja Semanal Admin</div><div class="task-meta">📍 Ambas · cierre semana vencido · Admin</div></div>
+              <div class="v2-progress"><div class="v2-progress-fill" style="width:5%;"></div></div>
+              <span style="font-size:11px;color:var(--v2-danger);font-weight:700;">0/12</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="v2-group">
+          <div class="v2-group-header"><span>🏪</span>OPERACIONES TIENDA<span class="count">5</span></div>
+          <div class="stagger">
+            <div class="v2-task-card today">
+              <span style="font-size:18px;">🟡</span>
+              <div><div class="task-name">Cierre Diario · Quilpué</div><div class="task-meta">📍 Quilpué · 21:00 · Líder Tienda</div></div>
+              <div class="v2-progress"><div class="v2-progress-fill" style="width:25%;"></div></div>
+              <span style="font-size:11px;color:var(--v2-text-dim);font-weight:700;">2/8</span>
+            </div>
+            <div class="v2-task-card today">
+              <span style="font-size:18px;">🟡</span>
+              <div><div class="task-name">Cierre Diario · San Antonio</div><div class="task-meta">📍 San Antonio · 21:00 · Líder Tienda</div></div>
+              <div class="v2-progress"><div class="v2-progress-fill" style="width:5%;"></div></div>
+              <span style="font-size:11px;color:var(--v2-text-dim);font-weight:700;">0/8</span>
+            </div>
+            <div class="v2-task-card today">
+              <span style="font-size:18px;">🟡</span>
+              <div><div class="task-name">Recepción Documentos Inv</div><div class="task-meta">📍 Ambas · Inventario</div></div>
+              <div class="v2-progress"><div class="v2-progress-fill" style="width:5%;"></div></div>
+              <span style="font-size:11px;color:var(--v2-text-dim);font-weight:700;">0/6</span>
+            </div>
+            <div class="v2-task-card future">
+              <span style="font-size:18px;">🟢</span>
+              <div><div class="task-name">Asistencia Diaria Admin</div><div class="task-meta">📍 Ambas · Admin · semanal</div></div>
+              <div class="v2-progress"><div class="v2-progress-fill" style="width:5%;"></div></div>
+              <span style="font-size:11px;color:var(--v2-text-dim);font-weight:700;">0/4</span>
+            </div>
+            <div class="v2-task-card future">
+              <span style="font-size:18px;">🟢</span>
+              <div><div class="task-name">Plataformas Diario LogWeb</div><div class="task-meta">🌐 Web · Logística</div></div>
+              <div class="v2-progress"><div class="v2-progress-fill" style="width:5%;"></div></div>
+              <span style="font-size:11px;color:var(--v2-text-dim);font-weight:700;">0/7</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="v2-group">
+          <div class="v2-group-header"><span>📣</span>MARKETING & COMERCIAL<span class="count">2</span></div>
+          <div class="stagger">
+            <div class="v2-task-card future">
+              <span style="font-size:18px;">🟢</span>
+              <div><div class="task-name">DMs Instagram Comercial</div><div class="task-meta">📍 Online · Marketing</div></div>
+              <div class="v2-progress"><div class="v2-progress-fill" style="width:5%;"></div></div>
+              <span style="font-size:11px;color:var(--v2-text-dim);font-weight:700;">0/5</span>
+            </div>
+            <div class="v2-task-card future">
+              <span style="font-size:18px;">🟢</span>
+              <div><div class="task-name">RRSS Diario Marketing</div><div class="task-meta">📍 Online · Marketing</div></div>
+              <div class="v2-progress"><div class="v2-progress-fill" style="width:5%;"></div></div>
+              <span style="font-size:11px;color:var(--v2-text-dim);font-weight:700;">0/4</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="v2-group">
+          <div class="v2-group-header"><span>💼</span>GERENCIA & FINANZAS<span class="count">2</span></div>
+          <div class="stagger">
+            <div class="v2-task-card future">
+              <span style="font-size:18px;">🟢</span>
+              <div><div class="task-name">Checklist Diario Gerencia</div><div class="task-meta">📍 Ambas · Gerencia · diario</div></div>
+              <div class="v2-progress"><div class="v2-progress-fill" style="width:5%;"></div></div>
+              <span style="font-size:11px;color:var(--v2-text-dim);font-weight:700;">0/6</span>
+            </div>
+            <div class="v2-task-card future">
+              <span style="font-size:18px;">🟢</span>
+              <div><div class="task-name">Checklist Diario Finanzas</div><div class="task-meta">📍 Ambas · Finanzas · diario</div></div>
+              <div class="v2-progress"><div class="v2-progress-fill" style="width:5%;"></div></div>
+              <span style="font-size:11px;color:var(--v2-text-dim);font-weight:700;">0/5</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============================== -->
+    <!-- DASHBOARD -->
+    <!-- ============================== -->
+    <div class="view" id="page-dashboard">
+      <div class="breadcrumb">Inicio › Dashboard</div>
+      <div class="page-header">
+        <h1 class="page-title">Dashboard Supervisión</h1>
+        <div class="v2-only" style="display:flex;gap:6px;">
+          <span class="pill active">Hoy</span>
+          <span class="pill">7d</span>
+          <span class="pill">30d</span>
+        </div>
+      </div>
+
+      <!-- V1 vacío -->
+      <div class="v1-only">
+        <div class="card" style="text-align:center;padding:60px;">
+          <p style="font-size:48px;opacity:.3;">📊</p>
+          <p style="font-size:14px;color:#94a3b8;margin-top:16px;">Dashboard cargando…</p>
+          <p style="font-size:11px;color:#cbd5e1;margin-top:8px;">Semáforo 8 deptos prometido · render no verificado</p>
+        </div>
+      </div>
+
+      <!-- V2 semáforo -->
+      <div class="v2-only">
+        <div class="section-title">Semáforo · 8 departamentos</div>
+        <div class="semaforo-grid stagger">
+          <div class="depto-tile-v2" style="border-top-color:var(--v2-danger);color:var(--v2-danger);"><div class="name">Gerencia</div><div class="pct" style="color:var(--v2-danger);">35%</div><div class="sub">-12% vs ayer</div></div>
+          <div class="depto-tile-v2" style="border-top-color:var(--v2-warn);color:var(--v2-warn);"><div class="name">Finanzas</div><div class="pct" style="color:var(--v2-warn);">62%</div><div class="sub">+4% · cierre pend.</div></div>
+          <div class="depto-tile-v2" style="border-top-color:var(--v2-accent);color:var(--v2-accent);"><div class="name">Marketing</div><div class="pct" style="color:var(--v2-accent);">85%</div><div class="sub">+8% · al día</div></div>
+          <div class="depto-tile-v2" style="border-top-color:var(--v2-accent);color:var(--v2-accent);"><div class="name">Comercial</div><div class="pct" style="color:var(--v2-accent);">78%</div><div class="sub">+2% · estable</div></div>
+          <div class="depto-tile-v2" style="border-top-color:var(--v2-warn);color:var(--v2-warn);"><div class="name">Admin</div><div class="pct" style="color:var(--v2-warn);">55%</div><div class="sub">RRHH pendiente</div></div>
+          <div class="depto-tile-v2" style="border-top-color:var(--v2-accent);color:var(--v2-accent);"><div class="name">Inventario</div><div class="pct" style="color:var(--v2-accent);">90%</div><div class="sub">+15% · 🏆 top</div></div>
+          <div class="depto-tile-v2" style="border-top-color:var(--v2-danger);color:var(--v2-danger);"><div class="name">Líderes Tienda</div><div class="pct" style="color:var(--v2-danger);">28%</div><div class="sub">aperturas pend.</div></div>
+          <div class="depto-tile-v2" style="border-top-color:var(--v2-warn);color:var(--v2-warn);"><div class="name">Logística Web</div><div class="pct" style="color:var(--v2-warn);">60%</div><div class="sub">despachos OK</div></div>
+        </div>
+
+        <div class="section-title" style="margin-top:32px;">Top 3 alertas</div>
+        <div class="stagger">
+          <div class="v2-task-card urgent"><span style="font-size:18px;">🚨</span><div><div class="task-name">Líderes Tienda · Quilpué sin apertura</div><div class="task-meta">Hace 2h · contactar Líder Quilpué</div></div><span class="badge bad">P0</span></div>
+          <div class="v2-task-card urgent"><span style="font-size:18px;">🚨</span><div><div class="task-name">Gerencia bajó 12% vs ayer</div><div class="task-meta">Tendencia 3 días consecutivos</div></div><span class="badge bad">P0</span></div>
+          <div class="v2-task-card today"><span style="font-size:18px;">⚠️</span><div><div class="task-name">Admin · RRHH pendiente cierre semanal</div><div class="task-meta">Joel · vence 18:00</div></div><span class="badge warn">P1</span></div>
+        </div>
+
+        <div class="section-title" style="margin-top:32px;">Ranking tiendas</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;">
+          <div class="kpi-tile">
+            <div style="display:flex;justify-content:space-between;align-items:center;">
+              <div><div style="font-size:13px;font-weight:800;color:var(--v2-text);">📍 Quilpué</div><div class="label">8 checklists hoy</div></div>
+              <div style="text-align:right;"><div class="kpi-num danger">42%</div><div style="font-size:10px;color:#991B1B;font-weight:700;">-15% sem</div></div>
+            </div>
+          </div>
+          <div class="kpi-tile">
+            <div style="display:flex;justify-content:space-between;align-items:center;">
+              <div><div style="font-size:13px;font-weight:800;color:var(--v2-text);">📍 San Antonio</div><div class="label">7 checklists hoy</div></div>
+              <div style="text-align:right;"><div style="font-family:'Plus Jakarta Sans',sans-serif;font-size:34px;font-weight:800;background:linear-gradient(135deg,#10B981,#34D399);-webkit-background-clip:text;-webkit-text-fill-color:transparent;letter-spacing:-1px;">76%</div><div style="font-size:10px;color:#065F46;font-weight:700;">+8% sem</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============================== -->
+    <!-- TABLERO V1 BROKEN -->
+    <!-- ============================== -->
+    <div class="view" id="page-tablero-broken">
+      <div style="background:#fef2f2;border:2px dashed #fca5a5;border-radius:16px;padding:48px;text-align:center;">
+        <div style="font-size:56px;">🃏</div>
+        <h2 style="font-size:22px;font-weight:800;margin-top:14px;color:#991b1b;">Módulo fantasma</h2>
+        <p style="font-size:14px;color:#dc2626;margin-top:8px;">Sidebar enlaza /tablero pero redirige a /dashboard sin valor distinto</p>
+        <p style="font-size:11px;color:#94a3b8;margin-top:16px;font-family:monospace;">v1 · bug detectado por War Room SMC · 2026-05-15</p>
+      </div>
+    </div>
+
+    <!-- ============================== -->
+    <!-- TABLERO V2 KANBAN -->
+    <!-- ============================== -->
+    <div class="view" id="page-tablero">
+      <div class="breadcrumb">Inicio › Tablero</div>
+      <div class="page-header">
+        <h1 class="page-title">Tablero Kanban</h1>
+        <span style="font-size:10px;background:linear-gradient(135deg,#F3E8FF,#FCE7F3);color:var(--v2-brand);padding:6px 14px;border-radius:6px;letter-spacing:1.5px;font-weight:800;border:1px solid rgba(168,85,247,0.3);">VISTA ALTERNATIVA A MI DÍA</span>
+      </div>
+
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:14px;">
+        <div style="background:#FAFAFA;border:1px solid var(--v2-border);border-radius:14px;padding:16px;min-height:420px;">
+          <div style="font-size:10px;font-weight:800;letter-spacing:1.5px;color:var(--v2-text-dim);margin-bottom:14px;text-transform:uppercase;">📋 PENDIENTE · 8</div>
+          <div class="card" style="margin-bottom:8px;padding:12px;border-left:4px solid var(--v2-danger);"><div style="font-size:12px;font-weight:700;color:var(--v2-text);">Apertura Quilpué</div><div style="font-size:10px;color:var(--v2-danger);margin-top:4px;font-weight:700;">🔴 URGENTE</div></div>
+          <div class="card" style="margin-bottom:8px;padding:12px;border-left:4px solid var(--v2-danger);"><div style="font-size:12px;font-weight:700;color:var(--v2-text);">Apertura San Antonio</div><div style="font-size:10px;color:var(--v2-danger);margin-top:4px;font-weight:700;">🔴 URGENTE</div></div>
+          <div class="card" style="margin-bottom:8px;padding:12px;border-left:4px solid var(--v2-border-strong);"><div style="font-size:12px;font-weight:700;color:var(--v2-text);">DMs Instagram</div><div style="font-size:10px;color:var(--v2-text-muted);margin-top:4px;">Marketing</div></div>
+          <div class="card" style="margin-bottom:8px;padding:12px;border-left:4px solid var(--v2-border-strong);"><div style="font-size:12px;font-weight:700;color:var(--v2-text);">RRSS Marketing</div></div>
+        </div>
+        <div style="background:#FFFBEB;border:1px solid #FDE68A;border-radius:14px;padding:16px;min-height:420px;">
+          <div style="font-size:10px;font-weight:800;letter-spacing:1.5px;color:#92400E;margin-bottom:14px;text-transform:uppercase;">⏳ EN CURSO · 2</div>
+          <div class="card" style="margin-bottom:8px;padding:12px;border-left:4px solid var(--v2-warn);"><div style="font-size:12px;font-weight:700;color:var(--v2-text);">Cierre Quilpué</div><div style="font-size:10px;color:#92400E;margin-top:4px;">2/8 ítems</div></div>
+          <div class="card" style="margin-bottom:8px;padding:12px;border-left:4px solid var(--v2-warn);"><div style="font-size:12px;font-weight:700;color:var(--v2-text);">Asistencia Admin</div><div style="font-size:10px;color:#92400E;margin-top:4px;">1/4 ítems</div></div>
+        </div>
+        <div style="background:#ECFEFF;border:1px solid #A5F3FC;border-radius:14px;padding:16px;min-height:420px;">
+          <div style="font-size:10px;font-weight:800;letter-spacing:1.5px;color:#155E75;margin-bottom:14px;text-transform:uppercase;">👁️ EN REVISIÓN · 1</div>
+          <div class="card" style="margin-bottom:8px;padding:12px;border-left:4px solid var(--v2-info);"><div style="font-size:12px;font-weight:700;color:var(--v2-text);">Cierre semanal Finanzas</div><div style="font-size:10px;color:var(--v2-text-muted);margin-top:4px;">Francis → David</div></div>
+        </div>
+        <div style="background:#F0FDF4;border:1px solid #86EFAC;border-radius:14px;padding:16px;min-height:420px;">
+          <div style="font-size:10px;font-weight:800;letter-spacing:1.5px;color:#065F46;margin-bottom:14px;text-transform:uppercase;">✅ APROBADO · 5</div>
+          <div class="card" style="margin-bottom:8px;padding:12px;border-left:4px solid var(--v2-accent);"><div style="font-size:12px;font-weight:700;color:var(--v2-text);">RRSS lunes</div><div style="font-size:10px;color:#065F46;margin-top:4px;">Aprobado · Dani</div></div>
+          <div class="card" style="margin-bottom:8px;padding:12px;border-left:4px solid var(--v2-accent);"><div style="font-size:12px;font-weight:700;color:var(--v2-text);">Inventario martes</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============================== -->
+    <!-- USUARIOS V1 BROKEN -->
+    <!-- ============================== -->
+    <div class="view" id="page-usuarios-broken">
+      <div class="error-404">
+        <h1>404</h1>
+        <p style="font-size:18px;color:#64748b;margin-top:16px;">This page could not be found.</p>
+        <div style="margin-top:24px;font-size:12px;color:#ef4444;font-family:monospace;">Bug P0 · sidebar enlaza /usuarios · PDF dice /admin/usuarios · ruta no implementada</div>
+      </div>
+    </div>
+
+    <!-- ============================== -->
+    <!-- USUARIOS V2 -->
+    <!-- ============================== -->
+    <div class="view" id="page-usuarios">
+      <div class="breadcrumb">Inicio › Usuarios</div>
+      <div class="page-header">
+        <h1 class="page-title">Gestión de Usuarios</h1>
+        <div style="display:flex;gap:8px;">
+          <button class="pill">📥 Import CSV</button>
+          <button class="pill active">+ Nuevo usuario</button>
+        </div>
+      </div>
+
+      <div class="card stagger" style="padding:0;overflow:hidden;">
+        <table style="width:100%;border-collapse:collapse;">
+          <thead>
+            <tr><th style="padding:14px;text-align:left;font-size:10px;color:var(--v2-text-muted);font-weight:800;letter-spacing:1.5px;text-transform:uppercase;border-bottom:1px solid var(--v2-border);background:#FBF7FF;">USUARIO</th>
+            <th style="padding:14px;text-align:left;font-size:10px;color:var(--v2-text-muted);font-weight:800;letter-spacing:1.5px;text-transform:uppercase;border-bottom:1px solid var(--v2-border);background:#FBF7FF;">ROL</th>
+            <th style="padding:14px;text-align:left;font-size:10px;color:var(--v2-text-muted);font-weight:800;letter-spacing:1.5px;text-transform:uppercase;border-bottom:1px solid var(--v2-border);background:#FBF7FF;">TIENDA</th>
+            <th style="padding:14px;text-align:left;font-size:10px;color:var(--v2-text-muted);font-weight:800;letter-spacing:1.5px;text-transform:uppercase;border-bottom:1px solid var(--v2-border);background:#FBF7FF;">ÚLT. ACTIV.</th>
+            <th style="background:#FBF7FF;"></th></tr>
+          </thead>
+          <tbody>
+            <tr style="border-bottom:1px solid var(--v2-border);"><td style="padding:14px;"><div style="display:flex;align-items:center;gap:10px;"><div style="width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,var(--v2-brand),#EC4899);color:white;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;box-shadow:0 2px 8px rgba(124,58,237,0.2);">MJ</div><div><div style="font-size:13px;font-weight:700;color:var(--v2-text);">María José Norambuela</div><div style="font-size:11px;color:var(--v2-text-muted);">mariajose@benditocapricho.cl</div></div></div></td><td style="padding:14px;"><span class="badge ok">Dueña</span></td><td style="padding:14px;font-size:12px;color:var(--v2-text-dim);">Todas</td><td style="padding:14px;font-size:11px;color:#065F46;font-weight:700;">Hoy</td><td style="padding:14px;"><button class="pill">···</button></td></tr>
+            <tr style="border-bottom:1px solid var(--v2-border);"><td style="padding:14px;"><div style="display:flex;align-items:center;gap:10px;"><div style="width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,#3b82f6,#06B6D4);color:white;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;box-shadow:0 2px 8px rgba(59,130,246,0.2);">DC</div><div><div style="font-size:13px;font-weight:700;color:var(--v2-text);">David Cárdenas</div><div style="font-size:11px;color:var(--v2-text-muted);">david@benditocapricho.cl</div></div></div></td><td style="padding:14px;"><span class="badge warn">Gerente</span></td><td style="padding:14px;font-size:12px;color:var(--v2-text-dim);">Todas</td><td style="padding:14px;font-size:11px;color:#065F46;font-weight:700;">Hoy</td><td style="padding:14px;"><button class="pill">···</button></td></tr>
+            <tr style="border-bottom:1px solid var(--v2-border);"><td style="padding:14px;"><div style="display:flex;align-items:center;gap:10px;"><div style="width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,#F59E0B,#FBBF24);color:white;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;box-shadow:0 2px 8px rgba(245,158,11,0.2);">D</div><div><div style="font-size:13px;font-weight:700;color:var(--v2-text);">Daniel (Dani)</div><div style="font-size:11px;color:var(--v2-text-muted);">dani@benditocapricho.cl</div></div></div></td><td style="padding:14px;"><span class="badge warn">Socio</span></td><td style="padding:14px;font-size:12px;color:var(--v2-text-dim);">Todas</td><td style="padding:14px;font-size:11px;color:#065F46;font-weight:700;">Hace 2h</td><td style="padding:14px;"><button class="pill">···</button></td></tr>
+            <tr style="border-bottom:1px solid var(--v2-border);"><td style="padding:14px;"><div style="display:flex;align-items:center;gap:10px;"><div style="width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,#10B981,#34D399);color:white;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;box-shadow:0 2px 8px rgba(16,185,129,0.2);">F</div><div><div style="font-size:13px;font-weight:700;color:var(--v2-text);">Francis</div><div style="font-size:11px;color:var(--v2-text-muted);">francis@benditocapricho.cl</div></div></div></td><td style="padding:14px;"><span class="badge ok">Jefe Depto.</span></td><td style="padding:14px;font-size:12px;color:var(--v2-text-dim);">Finanzas</td><td style="padding:14px;font-size:11px;color:#92400E;font-weight:700;">Ayer</td><td style="padding:14px;"><button class="pill">···</button></td></tr>
+            <tr style="border-bottom:1px solid var(--v2-border);"><td style="padding:14px;"><div style="display:flex;align-items:center;gap:10px;"><div style="width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,#EC4899,#F472B6);color:white;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;box-shadow:0 2px 8px rgba(236,72,153,0.2);">A</div><div><div style="font-size:13px;font-weight:700;color:var(--v2-text);">Ana Quiñonez</div><div style="font-size:11px;color:var(--v2-text-muted);">ana@benditocapricho.cl</div></div></div></td><td style="padding:14px;"><span class="badge ok">Jefe Depto.</span></td><td style="padding:14px;font-size:12px;color:var(--v2-text-dim);">Logística</td><td style="padding:14px;font-size:11px;color:#065F46;font-weight:700;">Hoy</td><td style="padding:14px;"><button class="pill">···</button></td></tr>
+            <tr><td style="padding:14px;"><div style="display:flex;align-items:center;gap:10px;"><div style="width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,#A855F7,#C084FC);color:white;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;box-shadow:0 2px 8px rgba(168,85,247,0.2);">LQ</div><div><div style="font-size:13px;font-weight:700;color:var(--v2-text);">Líder Quilpué</div><div style="font-size:11px;color:var(--v2-text-muted);">lider.quilpue@bc.cl</div></div></div></td><td style="padding:14px;"><span class="badge warn">Líder</span></td><td style="padding:14px;font-size:12px;color:var(--v2-text-dim);">📍 Quilpué</td><td style="padding:14px;font-size:11px;color:#991B1B;font-weight:700;">Nunca</td><td style="padding:14px;"><button class="pill" style="background:#FEE2E2;color:#991B1B;border-color:#FCA5A5;font-weight:700;">Magic link</button></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ============================== -->
+    <!-- REPORTES -->
+    <!-- ============================== -->
+    <div class="view" id="page-reportes">
+      <div class="breadcrumb">Inicio › Reportes</div>
+      <div class="page-header">
+        <h1 class="page-title">Reportes</h1>
+        <p class="greeting">Semana actual: 11 — 17 mayo</p>
+      </div>
+
+      <div style="display:flex;gap:8px;margin-bottom:24px;">
+        <span class="pill active">Todo</span>
+        <span class="pill">🏪 Bendito Capricho</span>
+        <span class="pill">🎉 Eventos</span>
+        <span class="pill">🌐 Web</span>
+      </div>
+
+      <div class="stagger" style="display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:24px;">
+        <div class="kpi-tile"><div class="kpi-num danger">0%</div><div class="label" style="color:var(--v2-text-muted);">Cumplimiento</div><div style="font-size:10px;color:var(--v2-danger);margin-top:4px;font-weight:700;">-3% vs sem pasada</div></div>
+        <div class="kpi-tile"><div class="kpi-num warn">0/68</div><div class="label" style="color:var(--v2-text-muted);">Checklists completados</div></div>
+        <div class="kpi-tile"><div class="kpi-num warn">0</div><div class="label" style="color:var(--v2-text-muted);">Tareas · 3 pendientes</div></div>
+      </div>
+
+      <div class="v2-only">
+        <div class="section-title">💡 Insights IA · semana</div>
+        <div class="card" style="background:linear-gradient(135deg,#F3E8FF 0%,#FCE7F3 100%);border-color:var(--v2-brand);">
+          <ul style="font-size:13px;color:var(--v2-text);line-height:1.9;padding-left:18px;">
+            <li>📉 <strong style="color:var(--v2-text);">Cumplimiento general 0%</strong> · semana sin actividad real registrada</li>
+            <li>📍 <strong style="color:#991B1B;">Quilpué</strong> bajó 15% vs semana pasada · contactar Líder</li>
+            <li>📈 <strong style="color:#065F46;">San Antonio</strong> subió 8% · replicar prácticas</li>
+            <li>🏆 <strong style="color:#065F46;">Inventario</strong> top performer (90%)</li>
+            <li>⚠️ 3 tareas pendientes &gt; 5 días — riesgo stalling</li>
+          </ul>
+        </div>
+
+        <div class="section-title" style="margin-top:24px;">Acciones rápidas</div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;">
+          <button class="pill">📄 Export PDF</button>
+          <button class="pill">📊 Export Excel</button>
+          <button class="pill">📧 Programar lunes 9AM</button>
+          <button class="pill">📤 Compartir Gerencia</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============================== -->
+    <!-- EMPRENDEDORES -->
+    <!-- ============================== -->
+    <div class="view" id="page-emprendedores">
+      <div class="breadcrumb">Inicio › Emprendedores</div>
+      <div class="page-header">
+        <h1 class="page-title">Emprendedores</h1>
+        <div style="display:flex;gap:8px;">
+          <button class="pill v2-only">📥 Import CSV</button>
+          <button class="pill active">+ Nuevo emprendedor</button>
+        </div>
+      </div>
+
+      <div class="v1-only">
+        <div class="card" style="text-align:center;padding:60px;">
+          <p style="font-size:14px;color:#64748b;">0 emprendedor(es)</p>
+          <p style="font-size:12px;color:#94a3b8;margin-top:8px;">No hay emprendedores registrados</p>
+        </div>
+      </div>
+
+      <div class="v2-only">
+        <div class="empty-v2">
+          <div style="font-size:80px;line-height:1;opacity:.7;">🛍️</div>
+          <h3 style="font-size:20px;font-weight:800;margin-top:16px;font-family:'Plus Jakarta Sans',sans-serif;">Aún no hay emprendedores</h3>
+          <p style="font-size:13px;color:var(--v2-text-dim);max-width:420px;margin:8px auto 24px;line-height:1.6;">Carga el primero con los datos básicos y empezá a hacer seguimiento de ventas mensuales y pagos pendientes.</p>
+          <div style="display:flex;gap:8px;justify-content:center;flex-wrap:wrap;">
+            <button class="pill active">+ Carga rápida</button>
+            <button class="pill">📥 Import bulk CSV</button>
+          </div>
+          <div style="font-size:11px;color:var(--v2-text-muted);margin-top:18px;">Tip: usá tags · deco · gourmet · accesorios · arte</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============================== -->
+    <!-- CALENDARIO -->
+    <!-- ============================== -->
+    <div class="view" id="page-calendario">
+      <div class="breadcrumb">Inicio › Calendario</div>
+      <div class="page-header">
+        <h1 class="page-title">Calendario</h1>
+        <div class="v2-only" style="display:flex;gap:6px;">
+          <span class="pill active">Mes</span>
+          <span class="pill">Semana</span>
+          <span class="pill">Día</span>
+        </div>
+      </div>
+
+      <div class="card">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
+          <h3 style="font-size:18px;font-weight:800;">Mayo 2026</h3>
+          <div style="display:flex;gap:4px;"><button class="pill">‹</button><button class="pill active">Hoy</button><button class="pill">›</button></div>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(7,1fr);gap:6px;margin-bottom:10px;font-size:10px;letter-spacing:1px;font-weight:700;">
+          <div style="text-align:center;padding:6px;color:var(--v2-text-muted);">L</div>
+          <div style="text-align:center;padding:6px;color:var(--v2-text-muted);">M</div>
+          <div style="text-align:center;padding:6px;color:var(--v2-text-muted);">M</div>
+          <div style="text-align:center;padding:6px;color:var(--v2-text-muted);">J</div>
+          <div style="text-align:center;padding:6px;color:var(--v2-text-muted);">V</div>
+          <div style="text-align:center;padding:6px;color:var(--v2-text-muted);">S</div>
+          <div style="text-align:center;padding:6px;color:var(--v2-text-muted);">D</div>
+        </div>
+        <div class="cal-grid">
+          <div class="cal-cell" style="opacity:.4;">28</div><div class="cal-cell" style="opacity:.4;">29</div><div class="cal-cell" style="opacity:.4;">30</div><div class="cal-cell has-events">1</div><div class="cal-cell has-events">2</div><div class="cal-cell">3</div><div class="cal-cell">4</div>
+          <div class="cal-cell has-events">5</div><div class="cal-cell has-events">6</div><div class="cal-cell has-events">7</div><div class="cal-cell has-events">8</div><div class="cal-cell has-events">9</div><div class="cal-cell">10</div><div class="cal-cell">11</div>
+          <div class="cal-cell has-events">12</div><div class="cal-cell has-events">13</div><div class="cal-cell today has-events">14</div><div class="cal-cell">15</div><div class="cal-cell">16</div><div class="cal-cell">17</div><div class="cal-cell">18</div>
+          <div class="cal-cell">19</div><div class="cal-cell">20</div><div class="cal-cell">21</div><div class="cal-cell">22</div><div class="cal-cell">23</div><div class="cal-cell">24</div><div class="cal-cell">25</div>
+          <div class="cal-cell">26</div><div class="cal-cell">27</div><div class="cal-cell">28</div><div class="cal-cell">29</div><div class="cal-cell">30</div><div class="cal-cell">31</div><div class="cal-cell" style="opacity:.4;">1</div>
+        </div>
+
+        <div class="v2-only" style="margin-top:24px;padding-top:24px;border-top:1px solid var(--v2-border);">
+          <div class="section-title">Leyenda · 8 departamentos</div>
+          <div style="display:flex;flex-wrap:wrap;gap:10px;">
+            <span style="font-size:11px;display:flex;align-items:center;gap:6px;color:var(--v2-text-dim);"><span style="width:10px;height:10px;background:var(--v2-danger);border-radius:50%;"></span>Gerencia</span>
+            <span style="font-size:11px;display:flex;align-items:center;gap:6px;color:var(--v2-text-dim);"><span style="width:10px;height:10px;background:var(--v2-warn);border-radius:50%;"></span>Finanzas</span>
+            <span style="font-size:11px;display:flex;align-items:center;gap:6px;color:var(--v2-text-dim);"><span style="width:10px;height:10px;background:var(--v2-accent);border-radius:50%;"></span>Marketing</span>
+            <span style="font-size:11px;display:flex;align-items:center;gap:6px;color:var(--v2-text-dim);"><span style="width:10px;height:10px;background:#3b82f6;border-radius:50%;"></span>Comercial</span>
+            <span style="font-size:11px;display:flex;align-items:center;gap:6px;color:var(--v2-text-dim);"><span style="width:10px;height:10px;background:var(--v2-brand);border-radius:50%;"></span>Admin</span>
+            <span style="font-size:11px;display:flex;align-items:center;gap:6px;color:var(--v2-text-dim);"><span style="width:10px;height:10px;background:#ec4899;border-radius:50%;"></span>Inventario</span>
+            <span style="font-size:11px;display:flex;align-items:center;gap:6px;color:var(--v2-text-dim);"><span style="width:10px;height:10px;background:#6366f1;border-radius:50%;"></span>Líderes</span>
+            <span style="font-size:11px;display:flex;align-items:center;gap:6px;color:var(--v2-text-dim);"><span style="width:10px;height:10px;background:var(--v2-info);border-radius:50%;"></span>Logística</span>
+          </div>
+          <button class="pill" style="margin-top:16px;">📅 Sync Google Calendar</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============================== -->
+    <!-- COMPARATIVA (con sección tabs) -->
+    <!-- ============================== -->
+    <div class="view" id="page-compare">
+      <div class="page-header">
+        <div>
+          <h1 class="page-title">Comparativa V1 ↔ V2</h1>
+          <p class="greeting">Navega entre secciones · ambos panes se actualizan automáticamente</p>
+        </div>
+        <button class="pill" onclick="setMode('audit')">🔍 Ver auditoría completa</button>
+      </div>
+
+      <!-- TABS SECCIÓN -->
+      <div class="section-tabs">
+        <div class="section-tab active warn" data-sec="mi-dia" onclick="setCompareSection('mi-dia')">☀️ Mi Día <span class="badge">UX</span></div>
+        <div class="section-tab warn" data-sec="dashboard" onclick="setCompareSection('dashboard')">📊 Dashboard <span class="badge">PARCIAL</span></div>
+        <div class="section-tab bad" data-sec="tablero" onclick="setCompareSection('tablero')">🃏 Tablero <span class="badge">P0</span></div>
+        <div class="section-tab warn" data-sec="calendario" onclick="setCompareSection('calendario')">📅 Calendario <span class="badge">PARCIAL</span></div>
+        <div class="section-tab ok" data-sec="emprendedores" onclick="setCompareSection('emprendedores')">🛍️ Emprendedores <span class="badge">OK</span></div>
+        <div class="section-tab ok" data-sec="reportes" onclick="setCompareSection('reportes')">📈 Reportes <span class="badge">OK</span></div>
+        <div class="section-tab bad" data-sec="usuarios" onclick="setCompareSection('usuarios')">👥 Usuarios <span class="badge">P0</span></div>
+      </div>
+
+      <!-- CONTENIDO COMPARATIVA · cargado por JS -->
+      <div class="compare-grid" id="compareContent"></div>
+    </div>
+
+    <!-- ============================== -->
+    <!-- AUDITORÍA (con sección tabs) -->
+    <!-- ============================== -->
+    <div class="view" id="page-audit">
+      <div class="page-header">
+        <div>
+          <h1 class="page-title">Reporte de auditoría</h1>
+          <p class="greeting">War Room SMC · 2026-05-15 · PDF Fase 1 vs realidad QAS · por sección</p>
+        </div>
+        <button class="pill" onclick="setMode('compare')">📊 Ver comparativa</button>
+      </div>
+
+      <!-- TABS SECCIÓN audit -->
+      <div class="section-tabs">
+        <div class="section-tab active" data-sec="overview" onclick="setAuditSection('overview')">📡 Vista general</div>
+        <div class="section-tab" data-sec="mi-dia" onclick="setAuditSection('mi-dia')">☀️ Mi Día</div>
+        <div class="section-tab warn" data-sec="dashboard" onclick="setAuditSection('dashboard')">📊 Dashboard</div>
+        <div class="section-tab bad" data-sec="tablero" onclick="setAuditSection('tablero')">🃏 Tablero</div>
+        <div class="section-tab" data-sec="calendario" onclick="setAuditSection('calendario')">📅 Calendario</div>
+        <div class="section-tab" data-sec="emprendedores" onclick="setAuditSection('emprendedores')">🛍️ Emprendedores</div>
+        <div class="section-tab" data-sec="reportes" onclick="setAuditSection('reportes')">📈 Reportes</div>
+        <div class="section-tab bad" data-sec="usuarios" onclick="setAuditSection('usuarios')">👥 Usuarios</div>
+      </div>
+
+      <!-- CONTENIDO AUDITORÍA · cargado por JS -->
+      <div id="auditContent"></div>
+    </div>
+
+  </main>
+</div>
+
+<!-- FAB Radar centrado (estilo LEMPAR) -->
+<button class="fab-radar" onclick="toggleVersions()" aria-label="Abrir historial de versiones">
+  📊
+  <span class="fab-radar-tooltip" id="indicatorText">🧠 War Room · v2 activa</span>
+</button>
+
+<script>
+  let currentMode = 'v2';
+  let currentSection = 'mi-dia';
+
+  // ========== DATA: contenido por sección ==========
+  const COMPARE_DATA = {
+    'mi-dia': {
+      title: 'Mi Día',
+      v1: {
+        h: '12 checklists en lista plana',
+        items: ['✅ Saludo "Buenas noches Daniel"','✅ Fecha clara','✅ 3 KPIs top básicos','✅ Tabs Todo/Bendito/Eventos/Web','⚠️ 12 checklists overload sin agrupar','⚠️ Sin filtro tienda Quilpué/SA','⚠️ Cards uniformes sin prioridad','⚠️ Progress "0%" sin contexto','⚠️ Sin acción rápida (entrar siempre)']
+      },
+      v2: {
+        h: 'Agrupado · prioridad cromática · filtro tienda',
+        items: ['✅ Todo lo de V1 +','🆕 Grupos: Urgente / Operaciones / Marketing / Gerencia','🆕 Prioridad: 🔴 vencido · 🟡 hoy · 🟢 futuro','🆕 Filtro tienda persistente Quilpué/San Antonio','🆕 Progress "3 de 8" en vez de "0%"','🆕 CTA "Empezar mi día" sticky','🆕 KPI con tendencia 7d/30d + sparkline','🆕 Hover ejecuta "Completar siguiente"','🆕 Filters bar segmented sticky']
+      }
+    },
+    'dashboard': {
+      title: 'Dashboard',
+      v1: {
+        h: 'Ruta existe · contenido no visible en scrape',
+        items: ['✅ /dashboard responde','⚠️ Semáforo 8 deptos prometido por PDF · no captado','⚠️ Sin jerarquía visual','⚠️ Sin drill-down por depto','⚠️ Sin top alertas visibles','⚠️ Sin comparativa entre tiendas']
+      },
+      v2: {
+        h: 'Semáforo 8 deptos + alertas + ranking tiendas',
+        items: ['🆕 Grid 4×2 con 8 deptos color-coded','🆕 % cumplimiento + tendencia vs ayer','🆕 Top 3 alertas P0 primer scroll','🆕 Ranking Quilpué vs San Antonio','🆕 Drill-down click depto','🆕 Filtros temporales Hoy/7d/30d','🆕 Glow effects en hover · scale + shadow','🆕 Semáforo con borde top color']
+      }
+    },
+    'tablero': {
+      title: 'Tablero',
+      v1: {
+        h: '❌ Módulo fantasma · redirige a /dashboard',
+        items: ['❌ Sidebar lista "Tablero"','❌ Click → redirige a /dashboard','❌ No documentado en PDF Fase 1','❌ Confunde usuario (¿qué hay distinto?)','❌ Pierde slot de feature real']
+      },
+      v2: {
+        h: 'Kanban Pendiente/En Curso/Revisión/Aprobado',
+        items: ['🆕 4 columnas color-coded','🆕 Cards drag-drop entre columnas','🆕 Filtro por departamento + tienda','🆕 Vista alterna a Mi Día','🆕 Counter por columna','🆕 Border-left con prioridad task','🆕 Diferenciador ClickUp-like real']
+      }
+    },
+    'calendario': {
+      title: 'Calendario',
+      v1: {
+        h: 'Existe · render sin verificar',
+        items: ['✅ Ruta /calendario responde','⚠️ Vista mensual prometida en PDF','⚠️ Sin códigos color por depto','⚠️ Sin alternativa Semana/Día','⚠️ Sin sync calendar externo','⚠️ Sin indicador volumen']
+      },
+      v2: {
+        h: 'Mes/Semana/Día · 8 colores depto · sync ICS',
+        items: ['🆕 Alternable Mes / Semana / Día','🆕 8 colores por departamento (leyenda)','🆕 Indicador volumen (puntos)','🆕 Sync Google Calendar (Dueña/Gerente)','🆕 Hover mini-modal con resumen','🆕 "Hoy" highlighted con gradient','🆕 Días previos/siguientes faded']
+      }
+    },
+    'emprendedores': {
+      title: 'Emprendedores',
+      v1: {
+        h: 'Funcional pero empty state mínimo',
+        items: ['✅ H1 + breadcrumb correctos','✅ Contador "0 emprendedor(es)"','✅ CTA "Nuevo emprendedor"','✅ Texto "No hay emprendedores"','⚠️ Sin ilustración','⚠️ Sin próximos pasos','⚠️ Sin import bulk para migración']
+      },
+      v2: {
+        h: 'Empty state rico + import CSV + tags + métricas',
+        items: ['🆕 Empty state ilustrado 80px','🆕 Mensaje guía concreto','🆕 Import bulk CSV (migración pyme)','🆕 Tags categoría: deco/gourmet/accesorios/arte','🆕 Métricas tienda: facturación · comisión · saldo','🆕 Vista grid con foto producto','🆕 Tip educativo bottom']
+      }
+    },
+    'reportes': {
+      title: 'Reportes',
+      v1: {
+        h: 'Funcional con data real (sem actual visible)',
+        items: ['✅ Semana 11-17 mayo visible','✅ 4 tabs (Todo/Bendito/Eventos/Web)','✅ KPI Cumplimiento 0% (-3%)','✅ Checklists 0/68 + 3 tareas','⚠️ "-3%" sin contexto baseline','⚠️ Sin export PDF/Excel','⚠️ Sin schedule envío automático','⚠️ Sin insights IA']
+      },
+      v2: {
+        h: 'Export + insights IA + schedule lunes',
+        items: ['🆕 Comparativa explícita "esta sem vs sem pasada vs mes"','🆕 Top + Bottom performers (tienda/persona)','🆕 Export PDF/Excel 1-click','🆕 Schedule envío lunes 9AM email','🆕 Insights IA con recomendaciones accionables','🆕 Gráficos: barras semanal · línea mensual · ranking','🆕 4 acciones rápidas pill bar']
+      }
+    },
+    'usuarios': {
+      title: 'Usuarios',
+      v1: {
+        h: '❌ 404 · sidebar enlaza /usuarios inexistente',
+        items: ['❌ Click sidebar → 404 Page not found','✅ PDF declara /admin/usuarios (sin testear)','❌ Imposible gestionar equipo desde UI','❌ Usuario nuevo muere ahí','❌ Bloqueante: no se puede invitar Líderes nuevos']
+      },
+      v2: {
+        h: 'Tabla completa + bulk actions + magic link',
+        items: ['🆕 Fix sidebar → /admin/usuarios (1 línea)','🆕 Tabla avatar + nombre + email + rol + tienda','🆕 Última actividad (Hoy/3d/7d/Nunca)','🆕 Bulk: invitar/desactivar varios','🆕 "Enviar magic link" si usuario sin password','🆕 Filtro por 8 roles del PDF','🆕 Import CSV migración inicial','🆕 Avatares con gradient color-coded']
+      }
+    }
+  };
+
+  const AUDIT_DATA = {
+    'overview': {
+      title: '📡 Vista general · RADAR + voces + cola',
+      content: `
+        <div class="audit-section">
+          <h3>📡 RADAR · 5 PROCESS</h3>
+          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;">
+            <div style="background:linear-gradient(135deg,#F3E8FF 0%,#FCE7F3 100%);border:1px solid var(--v2-border);border-radius:10px;padding:14px;"><strong style="color:var(--v2-brand);font-size:12px;">A · Mercado pyme retail</strong><p style="font-size:12px;color:var(--v2-text-dim);margin-top:4px;">Daniela uso nocturno 18:32 · patrón dueño-operador · diferenciador concept store + multi-local.</p></div>
+            <div style="background:linear-gradient(135deg,#F3E8FF 0%,#FCE7F3 100%);border:1px solid var(--v2-border);border-radius:10px;padding:14px;"><strong style="color:var(--v2-brand);font-size:12px;">B · Gap analysis</strong><p style="font-size:12px;color:var(--v2-text-dim);margin-top:4px;">Contextual inquiry · PDF × scraping × expectativa UX.</p></div>
+            <div style="background:linear-gradient(135deg,#F3E8FF 0%,#FCE7F3 100%);border:1px solid var(--v2-border);border-radius:10px;padding:14px;"><strong style="color:var(--v2-brand);font-size:12px;">C · ClickUp inspired</strong><p style="font-size:12px;color:var(--v2-text-dim);margin-top:4px;">Status colors · custom fields · vistas multi · navegación rica.</p></div>
+            <div style="background:linear-gradient(135deg,#F3E8FF 0%,#FCE7F3 100%);border:1px solid var(--v2-border);border-radius:10px;padding:14px;"><strong style="color:var(--v2-brand);font-size:12px;">D · Versionado lateral</strong><p style="font-size:12px;color:var(--v2-text-dim);margin-top:4px;">Regla 38 SMC · burdeo fixed lateral · navegación v1↔v2.</p></div>
+            <div style="background:linear-gradient(135deg,#F3E8FF 0%,#FCE7F3 100%);border:1px solid var(--v2-border);border-radius:10px;padding:14px;"><strong style="color:var(--v2-brand);font-size:12px;">E · Riesgos QA</strong><p style="font-size:12px;color:var(--v2-text-dim);margin-top:4px;">Auth ambigua · 8 roles no testeados · 2 P0 bloqueantes.</p></div>
+          </div>
+        </div>
+
+        <div class="audit-section">
+          <h3>📋 Mapeo PDF vs realidad</h3>
+          <table class="audit-table">
+            <thead><tr><th>Módulo</th><th>Ruta PDF</th><th>Sidebar</th><th>Estado</th><th>Gap</th></tr></thead>
+            <tbody>
+              <tr><td>Login</td><td style="font-family:'JetBrains Mono';font-size:11px;">/login</td><td>–</td><td><span class="badge ok">OK</span></td><td style="font-size:11px;color:var(--v2-text-muted);">Auth ambigua</td></tr>
+              <tr><td>Mi Día</td><td style="font-family:'JetBrains Mono';font-size:11px;">/mi-dia</td><td>✅</td><td><span class="badge ok">OK</span></td><td style="font-size:11px;color:var(--v2-text-muted);">UX overload</td></tr>
+              <tr><td>Dashboard</td><td style="font-family:'JetBrains Mono';font-size:11px;">/dashboard</td><td>✅</td><td><span class="badge warn">PARCIAL</span></td><td style="font-size:11px;color:var(--v2-text-muted);">Semáforo no visible</td></tr>
+              <tr class="bad"><td>– no en PDF</td><td style="font-family:'JetBrains Mono';font-size:11px;">/tablero</td><td>⚠️</td><td><span class="badge bad">REDIRECT</span></td><td style="font-size:11px;color:var(--v2-danger);font-weight:700;">Módulo fantasma</td></tr>
+              <tr><td>Checklists</td><td style="font-family:'JetBrains Mono';font-size:11px;">/checklists</td><td>❌</td><td><span class="badge warn">OCULTO</span></td><td style="font-size:11px;color:var(--v2-text-muted);">Sin vista global</td></tr>
+              <tr><td>Tareas</td><td style="font-family:'JetBrains Mono';font-size:11px;">/tareas</td><td>❌</td><td><span class="badge warn">OCULTO</span></td><td style="font-size:11px;color:var(--v2-text-muted);">Sin vista global</td></tr>
+              <tr><td>Calendario</td><td style="font-family:'JetBrains Mono';font-size:11px;">/calendario</td><td>✅</td><td><span class="badge warn">PARCIAL</span></td><td style="font-size:11px;color:var(--v2-text-muted);">Render pendiente</td></tr>
+              <tr><td>Emprendedores</td><td style="font-family:'JetBrains Mono';font-size:11px;">/emprendedores</td><td>✅</td><td><span class="badge ok">OK</span></td><td style="font-size:11px;color:var(--v2-text-muted);">0 registros</td></tr>
+              <tr><td>Reportes</td><td style="font-family:'JetBrains Mono';font-size:11px;">/reportes</td><td>✅</td><td><span class="badge ok">OK</span></td><td style="font-size:11px;color:var(--v2-text-muted);">Data real visible</td></tr>
+              <tr class="bad"><td>Usuarios</td><td style="font-family:'JetBrains Mono';font-size:11px;">/admin/usuarios</td><td>⚠️ /usuarios</td><td><span class="badge bad">404</span></td><td style="font-size:11px;color:var(--v2-danger);font-weight:700;">BUG P0</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="audit-section">
+          <h3>🎭 Voces críticas War Room</h3>
+          <div class="stagger">
+            <div class="voice-card"><div class="voice-header"><span class="voice-name">🐕 BA LEAD</span><span class="voice-skill">/ux-validate</span></div><p class="voice-text">"12 checklists en lista plana = overload. Grouping por categoría + filtro tienda visible primary."</p></div>
+            <div class="voice-card"><div class="voice-header"><span class="voice-name">🎨 FRONTEND</span><span class="voice-skill">/motion-engineer</span></div><p class="voice-text">"Paleta dark + Inter + glassmorphism. Prioridad cromática (🔴🟡🟢) + progress shimmer + motion sutil."</p></div>
+            <div class="voice-card"><div class="voice-header"><span class="voice-name">🔧 BACKEND</span><span class="voice-skill">/api-design</span></div><p class="voice-text">"Agregados 7d/30d via /api/v1/metrics/aggregates. '0% ayer' sin contexto es dato muerto."</p></div>
+            <div class="voice-card"><div class="voice-header"><span class="voice-name">👩 USER-QAS</span><span class="voice-skill">/test-plan</span></div><p class="voice-text">"8 roles declarados, 1 testeado. /usuarios 404 detectado HOY. QA por rol antes de PRD."</p></div>
+            <div class="voice-card"><div class="voice-header"><span class="voice-name">🚀 PRM</span><span class="voice-skill">/product-define</span></div><p class="voice-text">"Diferenciador: Monday para pyme retail. Vista Kanban como diferencial visible."</p></div>
+            <div class="voice-card"><div class="voice-header"><span class="voice-name">🧠 CEREBRO</span><span class="voice-skill">/sintetizar</span></div><p class="voice-text">"Orden: P0 bugs → auth → UX grouping → analytics. Sin orden, v2 es maquillaje."</p></div>
+          </div>
+        </div>
+
+        <div class="audit-section">
+          <h3>🚦 Cola Sentinela completa</h3>
+          <div class="cola-box">
+            <div class="cola-row"><span class="tag" style="color:var(--v2-danger);">[P0]</span><span class="bar done">▓▓▓▓▓▓▓▓▓▓</span> 100% Fix /usuarios → /admin/usuarios</div>
+            <div class="cola-row"><span class="tag" style="color:var(--v2-danger);">[P0]</span><span class="bar done">▓▓▓▓▓▓▓▓▓▓</span> 100% Decidir Tablero: borrar o Kanban</div>
+            <div class="cola-row"><span class="tag" style="color:var(--v2-danger);">[P0]</span><span class="bar todo">░░░░░░░░░░</span>   0% Auth real: NextAuth + RLS o solo email</div>
+            <div class="cola-row"><span class="tag" style="color:var(--v2-warn);">[P1]</span><span class="bar todo">░░░░░░░░░░</span>   0% Mi Día: agrupar + filtro tienda</div>
+            <div class="cola-row"><span class="tag" style="color:var(--v2-warn);">[P1]</span><span class="bar todo">░░░░░░░░░░</span>   0% Dashboard: semáforo 8 deptos + drill-down</div>
+            <div class="cola-row"><span class="tag" style="color:var(--v2-warn);">[P1]</span><span class="bar todo">░░░░░░░░░░</span>   0% QA con 8 roles, no solo Dueña</div>
+            <div class="cola-row"><span class="tag" style="color:var(--v2-info);">[P2]</span><span class="bar todo">░░░░░░░░░░</span>   0% Reportes: export PDF + insights IA</div>
+            <div class="cola-row"><span class="tag" style="color:var(--v2-info);">[P2]</span><span class="bar todo">░░░░░░░░░░</span>   0% Emprendedores: empty state + import CSV</div>
+            <div class="cola-row"><span class="tag" style="color:var(--v2-info);">[P2]</span><span class="bar todo">░░░░░░░░░░</span>   0% Calendario: códigos color + sync ICS</div>
+            <div class="cola-row"><span class="tag" style="color:var(--v2-brand-2);">[P3]</span><span class="bar done">▓▓▓▓▓▓▓▓▓▓</span> 100% Versionado lateral (Regla 38) ✅ aplicado</div>
+          </div>
+        </div>
+      `
+    }
+  };
+
+  // Audit por sección (auto generado desde COMPARE_DATA + extra metadata)
+  const AUDIT_SECTIONS_META = {
+    'mi-dia':       {status:'OK',     ruta:'/mi-dia',          gap:'UX overload · sin agrupación',     bugs:[],     mejoras:6, prio:'P1', voices:{'🐕 BA':'12 checklists planos · agrupar por categoría','🎨 Frontend':'Prioridad cromática rojo/ámbar/verde','🚀 PRM':'Filtro tienda Quilpué/SA primary'}},
+    'dashboard':    {status:'PARCIAL',ruta:'/dashboard',       gap:'Semáforo 8 deptos no visible',     bugs:[],     mejoras:6, prio:'P1', voices:{'🔧 Backend':'Agregados 7d/30d expuestos vía API','🎨 Frontend':'Grid 4×2 color-coded glow hover','🐕 BA':'Top 3 alertas primer scroll'}},
+    'tablero':      {status:'BUG P0', ruta:'/tablero',         gap:'Módulo fantasma · redirige',       bugs:['Sidebar enlaza ruta sin valor distinto','No documentado en PDF Fase 1'], mejoras:5, prio:'P0', voices:{'🚀 PRM':'Implementar Kanban real (4 columnas) · diferenciador ClickUp','🧠 Cerebro':'O eliminar del sidebar (1 línea) · decidir antes PRD'}},
+    'calendario':   {status:'PARCIAL',ruta:'/calendario',      gap:'Render no verificado',             bugs:[],     mejoras:5, prio:'P2', voices:{'🎨 Frontend':'8 colores por departamento + leyenda','🔧 Backend':'Sync ICS Google Calendar','🐕 BA':'Vista alterna Mes/Semana/Día'}},
+    'emprendedores':{status:'OK',     ruta:'/emprendedores',   gap:'Empty state mínimo',               bugs:[],     mejoras:5, prio:'P2', voices:{'🐕 BA':'Empty state rico con ilustración y guía','🔧 Backend':'Import bulk CSV migración inicial','🚀 PRM':'Tags categoría: deco/gourmet/accesorios/arte'}},
+    'reportes':     {status:'OK',     ruta:'/reportes',        gap:'Sin export · sin insights IA',     bugs:[],     mejoras:6, prio:'P2', voices:{'🔧 Backend':'Endpoint /metrics/aggregates con 7d/30d','🎨 Frontend':'Insights IA cards con recomendaciones accionables','🐕 BA':'Schedule envío lunes 9AM email'}},
+    'usuarios':     {status:'BUG P0', ruta:'/admin/usuarios',  gap:'Sidebar → /usuarios → 404',        bugs:['Sidebar map mal · enlaza ruta inexistente','PDF declara /admin/usuarios','Imposible gestionar equipo'], mejoras:7, prio:'P0', voices:{'👩 USER-QAS':'Bug detectado HOY · 1 commit fix','🐕 BA':'Tabla con bulk actions + magic link','🔧 Backend':'Filtro 8 roles del PDF'}}
+  };
+
+  function renderAuditSection(sec) {
+    if (sec === 'overview') return AUDIT_DATA['overview'].content;
+    const meta = AUDIT_SECTIONS_META[sec];
+    const compData = COMPARE_DATA[sec];
+    if (!meta || !compData) return '<p>Sin datos</p>';
+
+    const statusBadge = meta.status === 'OK' ? 'ok' : meta.status === 'PARCIAL' ? 'warn' : 'bad';
+    const prioColor = meta.prio === 'P0' ? 'var(--v2-danger)' : meta.prio === 'P1' ? 'var(--v2-warn)' : 'var(--v2-info)';
+
+    const voicesHtml = Object.entries(meta.voices).map(([agent,text]) =>
+      `<div class="voice-card"><div class="voice-header"><span class="voice-name">${agent}</span></div><p class="voice-text">"${text}"</p></div>`
+    ).join('');
+
+    const bugsHtml = meta.bugs.length ? `<div class="audit-section" style="border-left:4px solid var(--v2-danger);background:#FEF2F2;"><h3 style="color:#991B1B;">🐛 Bugs detectados</h3><ul style="font-size:13px;color:#991B1B;line-height:1.8;padding-left:18px;">${meta.bugs.map(b=>`<li>${b}</li>`).join('')}</ul></div>` : '';
+
+    const v1Html = compData.v1.items.map(i => `<li style="font-size:12px;color:#475569;padding:2px 0;">${i}</li>`).join('');
+    const v2Html = compData.v2.items.map(i => `<li style="font-size:12px;color:var(--v2-text);padding:2px 0;font-weight:500;">${i}</li>`).join('');
+
+    return `
+      <div class="audit-section">
+        <h3>📦 ${compData.title}</h3>
+        <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:14px;align-items:center;">
+          <span class="badge ${statusBadge}">${meta.status}</span>
+          <span style="font-size:11px;color:var(--v2-text-muted);font-family:'JetBrains Mono',monospace;">${meta.ruta}</span>
+          <span style="font-size:10px;background:linear-gradient(135deg,#F3E8FF,#FCE7F3);color:var(--v2-brand);padding:3px 9px;border-radius:5px;font-weight:800;border:1px solid rgba(168,85,247,0.25);">PRIO ${meta.prio}</span>
+          <span style="font-size:11px;color:var(--v2-text-dim);font-weight:600;">${meta.mejoras} mejoras V2</span>
+        </div>
+        <p style="font-size:13px;color:var(--v2-text-dim);">Gap detectado: <strong style="color:var(--v2-text);">${meta.gap}</strong></p>
+      </div>
+
+      ${bugsHtml}
+
+      <div class="audit-section">
+        <h3>🔄 V1 actual ↔ V2 propuesta</h3>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+          <div style="background:#FAFAFA;padding:18px;border-radius:14px;border:1px dashed #CBD5E1;">
+            <div style="font-size:10px;letter-spacing:1.5px;color:#64748B;font-weight:800;margin-bottom:8px;">V1 · SERGIO</div>
+            <p style="font-size:13px;color:var(--v2-text);margin-bottom:10px;font-weight:700;">${compData.v1.h}</p>
+            <ul style="padding-left:18px;line-height:1.8;">${v1Html}</ul>
+          </div>
+          <div style="background:linear-gradient(135deg,#FFFFFF 0%,#FBF7FF 100%);padding:18px;border-radius:14px;border:1.5px solid var(--v2-brand);box-shadow:0 4px 16px rgba(124,58,237,0.08);">
+            <div style="font-size:10px;letter-spacing:1.5px;color:var(--v2-brand);font-weight:800;margin-bottom:8px;">V2 · WAR ROOM</div>
+            <p style="font-size:13px;color:var(--v2-text);margin-bottom:10px;font-weight:700;">${compData.v2.h}</p>
+            <ul style="padding-left:18px;line-height:1.8;">${v2Html}</ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="audit-section">
+        <h3>🎭 Voces críticas War Room</h3>
+        <div class="stagger">${voicesHtml}</div>
+      </div>
+    `;
+  }
+
+  function renderCompareSection(sec) {
+    const data = COMPARE_DATA[sec];
+    if (!data) return;
+    const cont = document.getElementById('compareContent');
+    cont.innerHTML = `
+      <div class="compare-pane v1 animate-fade-up">
+        <span class="compare-label v1">V1 · Sergio actual</span>
+        <h3 style="font-size:18px;font-weight:800;margin-bottom:10px;color:#0f172a;">${data.title} — ${data.v1.h}</h3>
+        <ul style="font-size:13px;line-height:1.9;padding-left:18px;color:#475569;">
+          ${data.v1.items.map(i => `<li>${i}</li>`).join('')}
+        </ul>
+      </div>
+      <div class="compare-pane v2 animate-fade-up" style="animation-delay:80ms;">
+        <span class="compare-label v2">V2 · War Room SMC</span>
+        <h3 style="font-size:18px;font-weight:800;margin-bottom:10px;color:white;font-family:'Plus Jakarta Sans',sans-serif;">${data.title} — ${data.v2.h}</h3>
+        <ul style="font-size:13px;line-height:1.9;padding-left:18px;color:var(--v2-text);">
+          ${data.v2.items.map(i => `<li>${i}</li>`).join('')}
+        </ul>
+      </div>
+    `;
+  }
+
+  // ========== INTERACTIONS ==========
+  function toggleVersions() {
+    document.getElementById('modalVersiones').classList.toggle('open');
+    document.getElementById('modalOverlay').classList.toggle('open');
+  }
+
+  function setMode(mode) {
+    currentMode = mode;
+    const body = document.body;
+    const bannerText = document.getElementById('modeBannerText');
+    const badge = document.getElementById('versionBadge');
+    const indicator = document.getElementById('indicatorText');
+
+    document.getElementById('modalVersiones').classList.remove('open');
+    document.getElementById('modalOverlay').classList.remove('open');
+
+    document.getElementById('card-v1').classList.toggle('viewing', mode === 'v1');
+    document.getElementById('card-v2').classList.toggle('current', mode === 'v2');
+
+    // hide all v1/v2 conditional elements
+    document.querySelectorAll('.v1-only').forEach(el => el.style.display = '');
+    document.querySelectorAll('.v2-only').forEach(el => el.style.display = '');
+
+    if (mode === 'v1') {
+      body.setAttribute('data-mode', 'v1');
+      document.querySelectorAll('.v2-only').forEach(el => el.style.display = 'none');
+      document.querySelectorAll('.logo-bendito-v1').forEach(el => el.style.display = 'block');
+      badge.textContent = 'v1';
+      bannerText.textContent = '👀 V1 · Producción QAS actual (Sergio · Crealo SpA) — bugs visibles intencionalmente';
+      if (indicator) indicator.innerHTML = '<strong>v1</strong> · Sergio actual';
+      goPage('mi-dia');
+    } else if (mode === 'v2') {
+      body.setAttribute('data-mode', 'v2');
+      document.querySelectorAll('.v1-only').forEach(el => el.style.display = 'none');
+      badge.textContent = 'v2';
+      bannerText.textContent = '⚡ V2 · Versión Evolucionada War Room SMC';
+      if (indicator) indicator.innerHTML = '🧠 War Room · <strong>v2</strong> activa';
+      goPage('mi-dia');
+    } else if (mode === 'compare') {
+      body.setAttribute('data-mode', 'compare');
+      badge.textContent = '↔';
+      bannerText.textContent = '📊 Comparativa V1 ↔ V2 · navegá por sección';
+      if (indicator) indicator.innerHTML = '📊 Comparando v1 ↔ v2';
+      showOnly('page-compare');
+      setCompareSection('mi-dia');
+    } else if (mode === 'audit') {
+      body.setAttribute('data-mode', 'audit');
+      badge.textContent = '🔍';
+      bannerText.textContent = '🔍 Auditoría · navegá por sección';
+      if (indicator) indicator.innerHTML = '🔍 Auditoría completa';
+      showOnly('page-audit');
+      setAuditSection('overview');
+    }
+  }
+
+  function setCompareSection(sec) {
+    document.querySelectorAll('#page-compare .section-tab').forEach(t => t.classList.toggle('active', t.dataset.sec === sec));
+    renderCompareSection(sec);
+  }
+
+  function setAuditSection(sec) {
+    document.querySelectorAll('#page-audit .section-tab').forEach(t => t.classList.toggle('active', t.dataset.sec === sec));
+    document.getElementById('auditContent').innerHTML = renderAuditSection(sec);
+  }
+
+  function showOnly(viewId) {
+    document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+    const v = document.getElementById(viewId);
+    if (v) v.classList.add('active');
+  }
+
+  function goPage(page, el) {
+    document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+    const target = document.getElementById('page-' + page);
+    if (target) target.classList.add('active');
+
+    if (el && el.classList) {
+      document.querySelectorAll('.sidebar-link').forEach(l => l.classList.remove('active'));
+      el.classList.add('active');
+    } else {
+      // sync sidebar by data-page
+      document.querySelectorAll('.sidebar-link').forEach(l => {
+        l.classList.toggle('active', l.dataset.page === page);
+      });
+    }
+  }
+
+  // Keyboard shortcuts
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') {
+      document.getElementById('modalVersiones').classList.remove('open');
+      document.getElementById('modalOverlay').classList.remove('open');
+    }
+    if (e.altKey) {
+      if (e.key === '1') setMode('v1');
+      if (e.key === '2') setMode('v2');
+      if (e.key === 'c') setMode('compare');
+      if (e.key === 'a') setMode('audit');
+    }
+  });
+
+  // Init
+  setTimeout(() => setMode('v2'), 50);
+</script>
+</body>
+</html>
