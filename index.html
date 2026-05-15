@@ -630,55 +630,180 @@
     transform: translateY(-1px);
   }
 
-  /* ===== FAB RADAR (estilo LEMPAR · centrado bottom) ===== */
-  .fab-radar {
-    position: fixed; bottom: 28px; left: 50%; transform: translateX(-50%);
-    width: 60px; height: 60px; border-radius: 50%;
-    background: linear-gradient(135deg, var(--v2-brand) 0%, #EC4899 100%);
-    color: white;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 26px;
-    cursor: pointer; z-index: 45;
-    border: none;
-    box-shadow: 0 8px 28px rgba(124,58,237,0.45), 0 0 0 4px rgba(255,255,255,0.6);
-    transition: all .3s cubic-bezier(.32,.72,0,1);
+  /* ===== LIVE PREVIEW · vista real renderizada en comparativa ===== */
+  .live-preview-section {
+    margin-top: 32px;
+    background: linear-gradient(135deg, #FFFFFF 0%, #FBF7FF 100%);
+    border-radius: 20px;
+    padding: 24px;
+    border: 1px solid var(--v2-border);
+    box-shadow: 0 4px 20px rgba(124,58,237,0.06);
   }
-  .fab-radar:hover {
-    transform: translateX(-50%) scale(1.08);
-    box-shadow: 0 12px 36px rgba(124,58,237,0.6), 0 0 0 4px rgba(255,255,255,0.7);
+  .preview-grid {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 20px;
+    margin-top: 16px;
   }
-  .fab-radar:active { transform: translateX(-50%) scale(0.95); }
-  .fab-radar::before, .fab-radar::after {
-    content: ''; position: absolute; inset: -4px;
-    border-radius: 50%;
+  @media (max-width: 1024px) { .preview-grid { grid-template-columns: 1fr; } }
+  .preview-pane {
+    background: white; border-radius: 14px;
+    padding: 20px; min-height: 380px;
+    position: relative; overflow: hidden;
+  }
+  .preview-pane.v1 { border: 2px dashed #CBD5E1; }
+  .preview-pane.v2 {
     border: 2px solid var(--v2-brand);
-    opacity: 0;
-    animation: radar-pulse 2.4s cubic-bezier(0,.2,.8,1) infinite;
-    pointer-events: none;
+    background: linear-gradient(135deg, #FFFFFF 0%, #FBF7FF 100%);
+    box-shadow: 0 12px 32px rgba(124,58,237,.12);
   }
-  .fab-radar::after { animation-delay: 1.2s; border-color: #EC4899; }
-  @keyframes radar-pulse {
-    0% { transform: scale(0.9); opacity: 0.9; }
-    100% { transform: scale(2.4); opacity: 0; }
+  .preview-browser {
+    background: #F1F5F9; border-radius: 8px 8px 0 0;
+    padding: 8px 12px;
+    display: flex; align-items: center; gap: 6px;
+    margin: -20px -20px 14px;
+    border-bottom: 1px solid #E2E8F0;
   }
-  .fab-radar-tooltip {
-    position: absolute; bottom: 100%; left: 50%; transform: translateX(-50%);
-    margin-bottom: 14px;
-    background: var(--v2-text); color: white;
-    padding: 8px 14px; border-radius: 10px;
-    font-size: 11px; font-weight: 600;
-    white-space: nowrap;
-    opacity: 0; pointer-events: none;
-    transition: opacity .25s ease, transform .25s ease;
-    transform: translateX(-50%) translateY(6px);
-    box-shadow: 0 8px 20px rgba(0,0,0,0.18);
+  .preview-browser .dot { width: 10px; height: 10px; border-radius: 50%; }
+  .preview-browser .dot.red { background: #FCA5A5; }
+  .preview-browser .dot.yellow { background: #FCD34D; }
+  .preview-browser .dot.green { background: #86EFAC; }
+  .preview-browser .url {
+    margin-left: 8px; font-size: 10px; color: #64748B;
+    font-family: 'JetBrains Mono', monospace;
+    flex: 1; background: white; padding: 3px 10px;
+    border-radius: 999px; border: 1px solid #E2E8F0;
   }
-  .fab-radar-tooltip::after {
-    content: ''; position: absolute; top: 100%; left: 50%; transform: translateX(-50%);
-    border: 6px solid transparent; border-top-color: var(--v2-text);
+  .preview-pane.v2 .preview-browser { background: linear-gradient(135deg, #F3E8FF, #FCE7F3); border-bottom-color: var(--v2-border); }
+  .preview-pane.v2 .preview-browser .url { background: white; }
+
+  /* Mini app shell */
+  .mini-shell { display: grid; grid-template-columns: 90px 1fr; gap: 0; min-height: 280px; }
+  .mini-sidebar {
+    background: #FCE7F3; padding: 8px 6px; border-radius: 10px;
+    display: flex; flex-direction: column; gap: 4px;
+    font-size: 9px;
   }
-  .fab-radar:hover .fab-radar-tooltip {
-    opacity: 1; transform: translateX(-50%) translateY(0);
+  .preview-pane.v2 .mini-sidebar {
+    background: linear-gradient(180deg, #FFFFFF, #FBF7FF);
+    border: 1px solid var(--v2-border);
+  }
+  .mini-logo {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-style: italic; color: var(--v2-brand);
+    font-weight: 700; font-size: 11px; text-align: center;
+    padding: 4px 0 8px; border-bottom: 1px solid rgba(168,85,247,0.15);
+    margin-bottom: 4px;
+  }
+  .preview-pane.v2 .mini-logo {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-style: normal; color: var(--v2-text);
+    text-align: left; font-weight: 800; padding-left: 4px;
+  }
+  .mini-link {
+    padding: 4px 6px; border-radius: 6px;
+    font-size: 9px; color: #64748B;
+    display: flex; align-items: center; gap: 4px;
+  }
+  .mini-link.active {
+    background: linear-gradient(135deg, #F3E8FF, #FCE7F3);
+    color: var(--v2-brand); font-weight: 700;
+  }
+  .mini-link.broken { color: #EF4444; opacity: 0.6; }
+  .mini-link.broken::after { content: '404'; margin-left: auto; font-size: 7px; background: #FEE2E2; color: #991B1B; padding: 1px 3px; border-radius: 2px; }
+  .mini-main { padding: 0 0 0 14px; }
+  .mini-h1 { font-size: 14px; font-weight: 800; color: var(--v2-text); }
+  .mini-sub { font-size: 9px; color: #94A3B8; margin-bottom: 8px; }
+  .mini-kpi-row { display: flex; gap: 6px; margin-bottom: 10px; }
+  .mini-kpi {
+    flex: 1; background: #FAFAFA; border-radius: 8px;
+    padding: 8px 10px; border: 1px solid #F1F5F9;
+  }
+  .preview-pane.v2 .mini-kpi {
+    background: linear-gradient(135deg, white, #FBF7FF);
+    border: 1px solid var(--v2-border);
+  }
+  .mini-kpi .num { font-size: 16px; font-weight: 800; font-family: 'Plus Jakarta Sans',sans-serif; line-height: 1; }
+  .preview-pane.v2 .mini-kpi .num {
+    background: linear-gradient(135deg, var(--v2-brand), #EC4899);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  }
+  .mini-kpi .num.danger { color: #EF4444; }
+  .mini-kpi .num.warn { color: #F59E0B; }
+  .preview-pane.v2 .mini-kpi .num.danger { background: linear-gradient(135deg, #EF4444, #F97316); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+  .preview-pane.v2 .mini-kpi .num.warn { background: linear-gradient(135deg, #F59E0B, #FBBF24); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+  .mini-kpi .lbl { font-size: 8px; color: #94A3B8; margin-top: 2px; }
+  .mini-row {
+    background: white; border: 1px solid #F1F5F9;
+    border-radius: 6px; padding: 6px 10px;
+    font-size: 9px; margin-bottom: 3px;
+    display: flex; justify-content: space-between;
+  }
+  .mini-card-task {
+    background: white; border-radius: 8px;
+    border: 1px solid var(--v2-border); border-left: 3px solid;
+    padding: 7px 10px; font-size: 9px;
+    margin-bottom: 4px;
+    display: flex; align-items: center; gap: 6px;
+  }
+  .mini-card-task.urgent { border-left-color: #EF4444; background: linear-gradient(90deg, #FEF2F2, white 30%); }
+  .mini-card-task.today { border-left-color: #F59E0B; background: linear-gradient(90deg, #FFFBEB, white 30%); }
+  .mini-card-task.future { border-left-color: #10B981; }
+  .mini-group-head {
+    font-size: 8px; font-weight: 800; letter-spacing: 1.5px;
+    text-transform: uppercase; color: #94A3B8;
+    margin: 8px 0 4px; display: flex; align-items: center; gap: 4px;
+  }
+  .mini-depto {
+    background: white; border-radius: 6px; padding: 6px 8px;
+    border: 1px solid var(--v2-border); border-top: 2px solid;
+    font-size: 8px;
+  }
+  .mini-depto .pct { font-size: 12px; font-weight: 800; font-family: 'Plus Jakarta Sans',sans-serif; }
+  .mini-empty {
+    text-align: center; padding: 30px 10px;
+    color: #94A3B8; font-size: 10px;
+  }
+  .mini-404 {
+    text-align: center; padding: 30px 10px;
+  }
+  .mini-404 h1 { font-size: 36px; font-weight: 900; color: #EF4444; font-family: 'Plus Jakarta Sans',sans-serif; line-height: 1; }
+  .mini-404 p { font-size: 9px; color: #94A3B8; margin-top: 4px; }
+  .mini-kanban-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 4px; }
+  .mini-kanban-col {
+    background: #FAFAFA; border-radius: 6px; padding: 6px;
+    min-height: 100px;
+  }
+  .mini-kanban-col.curso { background: #FFFBEB; }
+  .mini-kanban-col.rev { background: #ECFEFF; }
+  .mini-kanban-col.ok { background: #F0FDF4; }
+  .mini-kanban-col .head { font-size: 7px; font-weight: 800; letter-spacing: 1px; color: #64748B; margin-bottom: 4px; text-transform: uppercase; }
+  .mini-kanban-card {
+    background: white; border-radius: 4px; padding: 4px 6px;
+    margin-bottom: 3px; font-size: 8px;
+    border-left: 2px solid #E5E7EB;
+  }
+  .mini-kanban-card.urgent { border-left-color: #EF4444; }
+  .mini-cal-grid { display: grid; grid-template-columns: repeat(7,1fr); gap: 2px; }
+  .mini-cal-cell {
+    aspect-ratio: 1; background: white; border-radius: 4px;
+    border: 1px solid #F1F5F9;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 8px; color: #64748B;
+    position: relative;
+  }
+  .mini-cal-cell.today {
+    background: linear-gradient(135deg, #F3E8FF, #FCE7F3);
+    color: var(--v2-brand); font-weight: 800;
+    border-color: var(--v2-brand);
+  }
+  .mini-cal-cell.evt::after {
+    content: ''; position: absolute; bottom: 2px; left: 50%; transform: translateX(-50%);
+    width: 8px; height: 2px; border-radius: 1px;
+    background: linear-gradient(90deg, var(--v2-brand), #EC4899);
+  }
+  .preview-section-title {
+    font-size: 11px; font-weight: 800; letter-spacing: 2px;
+    color: var(--v2-text-muted); text-transform: uppercase;
+    text-align: center; margin-bottom: 8px;
   }
 
   /* ===== HISTORIAL LATERAL (paleta Bendito) ===== */
@@ -1765,6 +1890,12 @@
 
       <!-- CONTENIDO COMPARATIVA · cargado por JS -->
       <div class="compare-grid" id="compareContent"></div>
+
+      <!-- LIVE PREVIEW · página real renderizada por sección -->
+      <div class="live-preview-section">
+        <div class="preview-section-title">📸 Vista en vivo · página real renderizada</div>
+        <div class="preview-grid" id="previewContent"></div>
+      </div>
     </div>
 
     <!-- ============================== -->
@@ -1798,11 +1929,8 @@
   </main>
 </div>
 
-<!-- FAB Radar centrado (estilo LEMPAR) -->
-<button class="fab-radar" onclick="toggleVersions()" aria-label="Abrir historial de versiones">
-  📊
-  <span class="fab-radar-tooltip" id="indicatorText">🧠 War Room · v2 activa</span>
-</button>
+<!-- FAB removido · tab lateral HISTORIAL es el único acceso -->
+<span id="indicatorText" style="display:none;"></span>
 
 <script>
   let currentMode = 'v2';
@@ -2038,6 +2166,317 @@
         <ul style="font-size:13px;line-height:1.9;padding-left:18px;color:var(--v2-text);">
           ${data.v2.items.map(i => `<li>${i}</li>`).join('')}
         </ul>
+      </div>
+    `;
+    renderPreview(sec);
+  }
+
+  // ==================== LIVE PREVIEWS HTML por sección ====================
+  function miniSidebar(activeSec, mode){
+    const links = [
+      ['mi-dia','☀️','Mi Día'],
+      ['dashboard','📊','Dashboard'],
+      ['tablero','🃏','Tablero'],
+      ['calendario','📅','Calendario'],
+      ['emprendedores','🛍️','Empr.'],
+      ['reportes','📈','Reportes'],
+      ['usuarios','👥','Usuarios']
+    ];
+    return `<div class="mini-sidebar">
+      <div class="mini-logo">${mode==='v1'?'<em>bendito♥</em>':'B · capricho'}</div>
+      ${links.map(([k,ic,n]) => {
+        const broken = mode==='v1' && ((k==='tablero') || (k==='usuarios'));
+        const cls = (k===activeSec?'active ':'') + (broken?'broken':'');
+        return `<div class="mini-link ${cls}"><span>${ic}</span> ${n}</div>`;
+      }).join('')}
+    </div>`;
+  }
+
+  const PREVIEW_HTML = {
+    'mi-dia': {
+      v1: `
+        ${miniSidebar('mi-dia','v1')}
+        <div class="mini-main">
+          <div class="mini-h1">Buenas noches, Daniel</div>
+          <div class="mini-sub">jueves, 14 de mayo</div>
+          <div class="mini-kpi-row">
+            <div class="mini-kpi"><div class="num warn">12</div><div class="lbl">checklists pend.</div></div>
+            <div class="mini-kpi"><div class="num warn">3</div><div class="lbl">tareas</div></div>
+            <div class="mini-kpi"><div class="num danger">0%</div><div class="lbl">ayer</div></div>
+          </div>
+          <div class="mini-row"><span>Checklist Diario Gerencia</span><span style="color:#94A3B8">0%</span></div>
+          <div class="mini-row"><span>DMs Instagram Comercial</span><span style="color:#94A3B8">0%</span></div>
+          <div class="mini-row"><span>Checklist Diario Finanzas</span><span style="color:#94A3B8">0%</span></div>
+          <div class="mini-row"><span>RRSS Diario Marketing</span><span style="color:#94A3B8">0%</span></div>
+          <div class="mini-row"><span>Cierres Caja Semanal Admin</span><span style="color:#94A3B8">0%</span></div>
+          <div class="mini-row"><span>Apertura Diaria - Quilpué</span><span style="color:#94A3B8">0%</span></div>
+          <div class="mini-row"><span>Cierre Diario - Quilpué</span><span style="color:#94A3B8">0%</span></div>
+          <div style="font-size:8px;color:#CBD5E1;margin-top:4px;">+ 5 más sin agrupar...</div>
+        </div>`,
+      v2: `
+        ${miniSidebar('mi-dia','v2')}
+        <div class="mini-main">
+          <div class="mini-h1">Buenas noches, Daniel ⚡</div>
+          <div class="mini-sub">jueves, 14 de mayo</div>
+          <div class="mini-kpi-row">
+            <div class="mini-kpi"><div class="num warn">12</div><div class="lbl">checklists</div></div>
+            <div class="mini-kpi"><div class="num warn">3</div><div class="lbl">tareas</div></div>
+            <div class="mini-kpi"><div class="num danger">0%</div><div class="lbl">ayer · -12%</div></div>
+            <div class="mini-kpi" style="background:linear-gradient(135deg,#F3E8FF,#FCE7F3);"><div class="num">68%</div><div class="lbl">prom sem</div></div>
+          </div>
+          <div class="mini-group-head">🔴 Urgente · 3</div>
+          <div class="mini-card-task urgent"><span>🔴</span><span style="font-weight:600;">Apertura Quilpué</span></div>
+          <div class="mini-card-task urgent"><span>🔴</span><span style="font-weight:600;">Apertura San Antonio</span></div>
+          <div class="mini-group-head">🏪 Operaciones · 5</div>
+          <div class="mini-card-task today"><span>🟡</span><span>Cierre Quilpué · 2/8</span></div>
+          <div class="mini-card-task today"><span>🟡</span><span>Cierre San Antonio</span></div>
+          <div class="mini-group-head">📣 Marketing · 2</div>
+          <div class="mini-card-task future"><span>🟢</span><span>DMs Instagram</span></div>
+        </div>`
+    },
+    'dashboard': {
+      v1: `
+        ${miniSidebar('dashboard','v1')}
+        <div class="mini-main">
+          <div class="mini-h1">Dashboard Supervisión</div>
+          <div class="mini-sub">Inicio › Dashboard</div>
+          <div class="mini-empty" style="background:#FAFAFA;border-radius:8px;padding:50px 10px;border:1px dashed #E2E8F0;margin-top:14px;">
+            <div style="font-size:32px;opacity:0.3;">📊</div>
+            <div style="margin-top:6px;color:#94A3B8;">Dashboard cargando…</div>
+            <div style="font-size:8px;color:#CBD5E1;margin-top:4px;">semáforo prometido · no captado</div>
+          </div>
+        </div>`,
+      v2: `
+        ${miniSidebar('dashboard','v2')}
+        <div class="mini-main">
+          <div class="mini-h1">Dashboard Supervisión</div>
+          <div class="mini-sub">semáforo · 8 departamentos</div>
+          <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:4px;margin:8px 0;">
+            <div class="mini-depto" style="border-top-color:#EF4444;"><div>Gerencia</div><div class="pct" style="color:#EF4444">35%</div></div>
+            <div class="mini-depto" style="border-top-color:#F59E0B;"><div>Finanzas</div><div class="pct" style="color:#F59E0B">62%</div></div>
+            <div class="mini-depto" style="border-top-color:#10B981;"><div>MKT</div><div class="pct" style="color:#10B981">85%</div></div>
+            <div class="mini-depto" style="border-top-color:#10B981;"><div>Comercial</div><div class="pct" style="color:#10B981">78%</div></div>
+            <div class="mini-depto" style="border-top-color:#F59E0B;"><div>Admin</div><div class="pct" style="color:#F59E0B">55%</div></div>
+            <div class="mini-depto" style="border-top-color:#10B981;"><div>Inv.</div><div class="pct" style="color:#10B981">90%</div></div>
+            <div class="mini-depto" style="border-top-color:#EF4444;"><div>Líderes</div><div class="pct" style="color:#EF4444">28%</div></div>
+            <div class="mini-depto" style="border-top-color:#F59E0B;"><div>Log.Web</div><div class="pct" style="color:#F59E0B">60%</div></div>
+          </div>
+          <div class="mini-group-head">Top 3 alertas</div>
+          <div class="mini-card-task urgent"><span>🚨</span><span>Quilpué sin apertura · P0</span></div>
+          <div class="mini-card-task urgent"><span>🚨</span><span>Gerencia -12% vs ayer · P0</span></div>
+          <div class="mini-card-task today"><span>⚠️</span><span>Admin · RRHH pendiente</span></div>
+        </div>`
+    },
+    'tablero': {
+      v1: `
+        ${miniSidebar('tablero','v1')}
+        <div class="mini-main">
+          <div class="mini-empty" style="background:#FEF2F2;border:1px dashed #FCA5A5;border-radius:8px;padding:60px 10px;">
+            <div style="font-size:32px;">🃏</div>
+            <div style="color:#991B1B;font-weight:700;margin-top:6px;">Módulo fantasma</div>
+            <div style="font-size:8px;color:#DC2626;margin-top:4px;">/tablero → redirige a /dashboard</div>
+          </div>
+        </div>`,
+      v2: `
+        ${miniSidebar('tablero','v2')}
+        <div class="mini-main">
+          <div class="mini-h1">Tablero Kanban</div>
+          <div class="mini-sub">vista alternativa a Mi Día</div>
+          <div class="mini-kanban-grid">
+            <div class="mini-kanban-col">
+              <div class="head">📋 PEND·8</div>
+              <div class="mini-kanban-card urgent">Apertura Quilpué</div>
+              <div class="mini-kanban-card urgent">Apertura SA</div>
+              <div class="mini-kanban-card">DMs Insta</div>
+            </div>
+            <div class="mini-kanban-col curso">
+              <div class="head">⏳ CURSO·2</div>
+              <div class="mini-kanban-card">Cierre Quilpué</div>
+              <div class="mini-kanban-card">Asist Admin</div>
+            </div>
+            <div class="mini-kanban-col rev">
+              <div class="head">👁️ REV·1</div>
+              <div class="mini-kanban-card">Cierre Fin.</div>
+            </div>
+            <div class="mini-kanban-col ok">
+              <div class="head">✅ OK·5</div>
+              <div class="mini-kanban-card">RRSS lun</div>
+              <div class="mini-kanban-card">Inv mar</div>
+            </div>
+          </div>
+        </div>`
+    },
+    'calendario': {
+      v1: (function(){
+        const cells = [];
+        for(let i=28; i<=31; i++) cells.push(`<div class="mini-cal-cell" style="opacity:.4;">${i}</div>`);
+        for(let i=1; i<=18; i++) {
+          const today = i===14;
+          cells.push(`<div class="mini-cal-cell ${today?'today':''}">${i}</div>`);
+        }
+        return `${miniSidebar('calendario','v1')}
+        <div class="mini-main">
+          <div class="mini-h1">Calendario</div>
+          <div class="mini-sub">Mayo 2026</div>
+          <div class="mini-cal-grid" style="margin-top:8px;">${cells.join('')}</div>
+          <div style="font-size:8px;color:#94A3B8;margin-top:6px;">vista única · sin códigos color · sin sync</div>
+        </div>`;
+      })(),
+      v2: (function(){
+        const cells = [];
+        for(let i=28; i<=31; i++) cells.push(`<div class="mini-cal-cell" style="opacity:.4;">${i}</div>`);
+        for(let i=1; i<=18; i++) {
+          const today = i===14;
+          const evt = [1,2,5,6,7,8,9,12,13,14].includes(i);
+          cells.push(`<div class="mini-cal-cell ${today?'today':''} ${evt?'evt':''}">${i}</div>`);
+        }
+        return `${miniSidebar('calendario','v2')}
+        <div class="mini-main">
+          <div style="display:flex;justify-content:space-between;align-items:center;">
+            <div class="mini-h1">Calendario · Mayo 2026</div>
+            <div style="display:flex;gap:2px;"><span style="font-size:8px;padding:3px 8px;background:#F3E8FF;color:var(--v2-brand);border-radius:6px;font-weight:700;">Mes</span><span style="font-size:8px;padding:3px 8px;color:#94A3B8;">Sem</span><span style="font-size:8px;padding:3px 8px;color:#94A3B8;">Día</span></div>
+          </div>
+          <div class="mini-cal-grid" style="margin-top:8px;">${cells.join('')}</div>
+          <div style="display:flex;gap:4px;margin-top:8px;flex-wrap:wrap;">
+            <span style="font-size:7px;color:#64748B;display:flex;align-items:center;gap:3px;"><span style="width:6px;height:6px;background:#EF4444;border-radius:50%"></span>Ger.</span>
+            <span style="font-size:7px;color:#64748B;display:flex;align-items:center;gap:3px;"><span style="width:6px;height:6px;background:#F59E0B;border-radius:50%"></span>Fin.</span>
+            <span style="font-size:7px;color:#64748B;display:flex;align-items:center;gap:3px;"><span style="width:6px;height:6px;background:#10B981;border-radius:50%"></span>MKT</span>
+            <span style="font-size:7px;color:#64748B;display:flex;align-items:center;gap:3px;"><span style="width:6px;height:6px;background:var(--v2-brand);border-radius:50%"></span>Admin</span>
+          </div>
+        </div>`;
+      })()
+    },
+    'emprendedores': {
+      v1: `
+        ${miniSidebar('emprendedores','v1')}
+        <div class="mini-main">
+          <div class="mini-h1">Emprendedores</div>
+          <div class="mini-sub">Inicio › Emprendedores</div>
+          <div class="mini-empty" style="background:#FAFAFA;padding:60px 10px;border:1px solid #F1F5F9;border-radius:8px;margin-top:14px;">
+            <div style="color:#64748B;">0 emprendedor(es)</div>
+            <div style="font-size:8px;color:#94A3B8;margin-top:4px;">No hay emprendedores registrados</div>
+          </div>
+        </div>`,
+      v2: `
+        ${miniSidebar('emprendedores','v2')}
+        <div class="mini-main">
+          <div style="display:flex;justify-content:space-between;align-items:center;">
+            <div class="mini-h1">Emprendedores</div>
+            <div style="display:flex;gap:3px;"><span style="font-size:8px;padding:3px 7px;background:white;border:1px solid var(--v2-border);border-radius:6px;">📥 CSV</span><span style="font-size:8px;padding:3px 7px;background:linear-gradient(135deg,#F3E8FF,#FCE7F3);color:var(--v2-brand);border-radius:6px;font-weight:700;">+ Nuevo</span></div>
+          </div>
+          <div class="mini-empty" style="background:linear-gradient(135deg,white,#FBF7FF);border:1.5px dashed var(--v2-brand-2);border-radius:10px;margin-top:10px;padding:30px 10px;">
+            <div style="font-size:36px;">🛍️</div>
+            <div style="font-weight:800;color:var(--v2-text);margin-top:8px;font-size:11px;">Aún no hay emprendedores</div>
+            <div style="font-size:8px;color:#64748B;max-width:200px;margin:6px auto 0;">Carga el primero o importá bulk · tags: deco/gourmet/accesorios/arte</div>
+            <div style="display:flex;gap:4px;justify-content:center;margin-top:10px;">
+              <span style="font-size:8px;padding:4px 8px;background:linear-gradient(135deg,var(--v2-brand),#EC4899);color:white;border-radius:6px;font-weight:700;">+ Carga rápida</span>
+              <span style="font-size:8px;padding:4px 8px;background:white;border:1px solid var(--v2-border);border-radius:6px;">📥 Import CSV</span>
+            </div>
+          </div>
+        </div>`
+    },
+    'reportes': {
+      v1: `
+        ${miniSidebar('reportes','v1')}
+        <div class="mini-main">
+          <div class="mini-h1">Reportes</div>
+          <div class="mini-sub">Semana actual: 11 — 17 mayo</div>
+          <div style="display:flex;gap:3px;margin:6px 0;">
+            <span style="font-size:8px;padding:3px 7px;background:#F1F5F9;color:#64748B;border-radius:999px;">Todo</span>
+            <span style="font-size:8px;padding:3px 7px;color:#94A3B8;">Bendito</span>
+            <span style="font-size:8px;padding:3px 7px;color:#94A3B8;">Eventos</span>
+            <span style="font-size:8px;padding:3px 7px;color:#94A3B8;">Web</span>
+          </div>
+          <div class="mini-kpi-row">
+            <div class="mini-kpi"><div class="num danger">0%</div><div class="lbl">Cumpl. · -3%</div></div>
+            <div class="mini-kpi"><div class="num warn">0/68</div><div class="lbl">Checklists</div></div>
+            <div class="mini-kpi"><div class="num warn">0</div><div class="lbl">Tareas · 3 pend</div></div>
+          </div>
+          <div style="font-size:8px;color:#CBD5E1;margin-top:10px;text-align:center;">sin export · sin insights · sin schedule</div>
+        </div>`,
+      v2: `
+        ${miniSidebar('reportes','v2')}
+        <div class="mini-main">
+          <div class="mini-h1">Reportes</div>
+          <div class="mini-sub">Semana actual: 11 — 17 mayo</div>
+          <div class="mini-kpi-row" style="margin-top:8px;">
+            <div class="mini-kpi"><div class="num danger">0%</div><div class="lbl">Cumpl. · -3%</div></div>
+            <div class="mini-kpi"><div class="num warn">0/68</div><div class="lbl">Checklists</div></div>
+            <div class="mini-kpi"><div class="num warn">0</div><div class="lbl">3 pend</div></div>
+          </div>
+          <div class="mini-group-head">💡 Insights IA · semana</div>
+          <div style="background:linear-gradient(135deg,#F3E8FF,#FCE7F3);border:1px solid var(--v2-brand);border-radius:8px;padding:8px 10px;font-size:8px;color:#475569;line-height:1.7;">
+            📉 Cumplimiento 0% · sin actividad real<br>
+            📍 Quilpué -15% vs sem · contactar Líder<br>
+            📈 San Antonio +8% · replicar prácticas<br>
+            🏆 Inventario top (90%)
+          </div>
+          <div style="display:flex;gap:3px;margin-top:8px;flex-wrap:wrap;">
+            <span style="font-size:8px;padding:3px 7px;background:white;border:1px solid var(--v2-border);border-radius:999px;">📄 PDF</span>
+            <span style="font-size:8px;padding:3px 7px;background:white;border:1px solid var(--v2-border);border-radius:999px;">📊 Excel</span>
+            <span style="font-size:8px;padding:3px 7px;background:white;border:1px solid var(--v2-border);border-radius:999px;">📧 Lun 9AM</span>
+          </div>
+        </div>`
+    },
+    'usuarios': {
+      v1: `
+        ${miniSidebar('usuarios','v1')}
+        <div class="mini-main">
+          <div class="mini-404">
+            <h1>404</h1>
+            <p>This page could not be found.</p>
+            <p style="color:#EF4444;margin-top:8px;font-family:'JetBrains Mono',monospace;">/usuarios · ruta no implementada</p>
+            <p style="margin-top:10px;">PDF declara /admin/usuarios</p>
+          </div>
+        </div>`,
+      v2: `
+        ${miniSidebar('usuarios','v2')}
+        <div class="mini-main">
+          <div style="display:flex;justify-content:space-between;align-items:center;">
+            <div class="mini-h1">Gestión de Usuarios</div>
+            <span style="font-size:8px;padding:3px 7px;background:linear-gradient(135deg,#F3E8FF,#FCE7F3);color:var(--v2-brand);border-radius:6px;font-weight:700;">+ Nuevo</span>
+          </div>
+          <div style="margin-top:10px;">
+            ${[
+              ['MJ','María José','Dueña','Todas','Hoy','#A855F7,#EC4899'],
+              ['DC','David Cárdenas','Gerente','Todas','Hoy','#3B82F6,#06B6D4'],
+              ['D','Daniel','Socio','Todas','2h','#F59E0B,#FBBF24'],
+              ['F','Francis','Jefe','Finanzas','Ayer','#10B981,#34D399'],
+              ['A','Ana Quiñonez','Jefe','Logística','Hoy','#EC4899,#F472B6'],
+              ['LQ','Líder Quilpué','Líder','Quilpué','Nunca','#A855F7,#C084FC']
+            ].map(([ini,nom,rol,tnd,act,grad])=>`
+              <div style="display:flex;align-items:center;gap:8px;padding:5px 8px;border-bottom:1px solid #F1F5F9;font-size:9px;">
+                <div style="width:18px;height:18px;border-radius:50%;background:linear-gradient(135deg,${grad});color:white;font-size:7px;font-weight:800;display:flex;align-items:center;justify-content:center;">${ini}</div>
+                <div style="flex:1;"><div style="font-weight:700;">${nom}</div></div>
+                <div style="color:#64748B;font-size:8px;">${rol}</div>
+                <div style="color:${act==='Nunca'?'#EF4444':act==='Ayer'?'#F59E0B':'#10B981'};font-size:8px;font-weight:700;">${act}</div>
+              </div>
+            `).join('')}
+          </div>
+        </div>`
+    }
+  };
+
+  function renderPreview(sec) {
+    const data = PREVIEW_HTML[sec];
+    if (!data) {
+      document.getElementById('previewContent').innerHTML = '';
+      return;
+    }
+    document.getElementById('previewContent').innerHTML = `
+      <div class="preview-pane v1 animate-fade-up">
+        <div class="preview-browser">
+          <span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span>
+          <span class="url">app-alpha-beige-15.vercel.app${sec==='mi-dia'?'/mi-dia':'/'+sec}</span>
+        </div>
+        <div class="mini-shell">${data.v1}</div>
+      </div>
+      <div class="preview-pane v2 animate-fade-up" style="animation-delay:80ms;">
+        <div class="preview-browser">
+          <span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span>
+          <span class="url">bendito-capricho-v2-smc${sec==='mi-dia'?'/mi-dia':'/'+sec}</span>
+        </div>
+        <div class="mini-shell">${data.v2}</div>
       </div>
     `;
   }
