@@ -838,8 +838,9 @@
     box-shadow: -16px 0 48px rgba(124,58,237,.18);
     transition: right .4s cubic-bezier(.32,.72,0,1); z-index: 100; overflow-y: auto;
     color: var(--v2-text);
+    pointer-events: none;
   }
-  .modal-versiones.open { right: 0; }
+  .modal-versiones.open { right: 0; pointer-events: auto; }
   .modal-overlay {
     position: fixed; inset: 0; background: rgba(30,27,46,0.4);
     backdrop-filter: blur(8px); z-index: 99;
@@ -1315,17 +1316,18 @@
   var skey = "smc_pin_" + KEY + "_" + V;
   var vkey = "smc_pin_v_" + KEY;
   if (localStorage.getItem(vkey) !== V){
+    Object.keys(localStorage).forEach(function(k){ if (k.indexOf("smc_pin_" + KEY) === 0 && k !== vkey) localStorage.removeItem(k); });
     Object.keys(sessionStorage).forEach(function(k){ if (k.indexOf("smc_pin_" + KEY) === 0) sessionStorage.removeItem(k); });
     localStorage.setItem(vkey, V);
   }
-  if (sessionStorage.getItem(skey) === "1"){ g.style.display = "none"; }
+  if (localStorage.getItem(skey) === "1"){ g.style.display = "none"; }
   else { setTimeout(function(){ bx[0].focus(); }, 200); }
   function code(){ return Array.from(bx).map(function(b){ return (b.value||"").toUpperCase(); }).join(""); }
   function val(){
     var c = code();
     if (c.length < 6) return;
     if (c === PIN){
-      sessionStorage.setItem(skey, "1");
+      localStorage.setItem(skey, "1");
       bx.forEach(function(b){ b.classList.add("f"); });
       g.style.transition = "opacity 400ms ease, transform 400ms ease";
       setTimeout(function(){ g.style.opacity = "0"; g.style.transform = "scale(1.04)"; }, 200);
@@ -3149,6 +3151,15 @@
       }, 700);
     }, 350);
   }
+
+  // Click fuera de modal Caprichito → cierra (no bloquea clicks de la app)
+  document.addEventListener('click', function(e) {
+    const modal = document.getElementById('caprichitoModal');
+    const fab = document.getElementById('caprichitoFab');
+    if (modal && modal.classList.contains('open') && !modal.contains(e.target) && e.target !== fab && !fab.contains(e.target)) {
+      modal.classList.remove('open');
+    }
+  });
 
   // Init · arranca en V4 (nueva SMC) por defecto
   setTimeout(() => setMode('v4'), 50);
