@@ -2854,6 +2854,20 @@
       }
     });
 
+    // V3 agrega 2 ítems extra (Checklist Semanal Gerencia + Historias Instagram Semanal) para llegar a 14
+    document.querySelectorAll('#page-mi-dia .v3-extra-row').forEach(n => n.remove());
+    if (version === 'v3') {
+      const container = document.querySelector('#page-mi-dia .v1-only .stagger');
+      if (container) {
+        ['Checklist Semanal Gerencia','Historias Instagram Semanal'].forEach(name => {
+          const row = document.createElement('div');
+          row.className = 'v1-checklist-row v3-extra-row';
+          row.innerHTML = '<span style="font-size:13px;">' + name + ' — ' + itemDate + '</span><span style="font-size:11px;color:#64748b;">0% Pendiente</span>';
+          container.appendChild(row);
+        });
+      }
+    }
+
     // task-meta dentro de v2-only (mantiene contexto)
     // (los grupos v2 no llevan fecha visible · no se tocan)
 
