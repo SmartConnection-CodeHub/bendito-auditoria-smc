@@ -2772,23 +2772,27 @@
 
     if (renderMode === 'v1') {
       body.setAttribute('data-mode', 'v1');
+      body.setAttribute('data-version', mode);
       document.querySelectorAll('.v2-only').forEach(el => el.style.display = 'none');
       document.querySelectorAll('.logo-bendito-v1').forEach(el => el.style.display = 'block');
       badge.textContent = mode;
-      bannerText.textContent = mode === 'v3'
-        ? '🔵 V3 · Sergio LIVE en bendito-capricho.vercel.app · 14 checklists planos · 3 P0 reincidentes'
-        : '👀 V1 · Producción QAS original (Sergio · Crealo SpA) — bugs visibles intencionalmente';
-      if (indicator) indicator.innerHTML = '<strong>' + mode + '</strong> · Sergio ' + (mode === 'v3' ? 'actual' : 'histórico');
+      bannerText.innerHTML = mode === 'v3'
+        ? '🔵 V3 · Sergio LIVE · 14 checklists planos · 3 P0 reincidentes · <a href="https://bendito-capricho.vercel.app/" target="_blank" style="color:white;text-decoration:underline;font-weight:700;">↗ Abrir live de Sergio</a>'
+        : '👀 V1 · Producción QAS original (Sergio · Crealo SpA · 14-may) — bugs visibles intencionalmente';
+      if (indicator) indicator.innerHTML = '<strong>' + mode + '</strong> · Sergio ' + (mode === 'v3' ? 'actual (18-may)' : 'histórico (14-may)');
       goPage('mi-dia');
+      applyVersionData(mode);
     } else if (renderMode === 'v2') {
       body.setAttribute('data-mode', 'v2');
+      body.setAttribute('data-version', mode);
       document.querySelectorAll('.v1-only').forEach(el => el.style.display = 'none');
       badge.textContent = mode;
       bannerText.textContent = mode === 'v4'
-        ? '⚡ V4 · SMC NUEVA · 8 NEWs aplicados + 3 P0 cerrados (auth · usuarios · tablero)'
-        : '⚡ V2 · Primera evolución SMC (histórica) · base de V4';
+        ? '⚡ V4 · SMC NUEVA (18-may) · 8 NEWs aplicados + 3 P0 cerrados (auth · usuarios · tablero) + sparkline 7d + CTA sticky'
+        : '⚡ V2 · Primera evolución SMC histórica (15-may) · base de V4';
       if (indicator) indicator.innerHTML = '🧠 War Room · <strong>' + mode + '</strong> activa';
       goPage('mi-dia');
+      applyVersionData(mode);
     } else if (mode === 'compare') {
       body.setAttribute('data-mode', 'compare');
       document.querySelectorAll('.v1-only').forEach(el => el.style.display = 'none');
@@ -2818,6 +2822,49 @@
   function setAuditSection(sec) {
     document.querySelectorAll('#page-audit .section-tab').forEach(t => t.classList.toggle('active', t.dataset.sec === sec));
     document.getElementById('auditContent').innerHTML = renderAuditSection(sec);
+  }
+
+  // === applyVersionData (2026-05-18 fix Guillermo): el page-mi-dia tiene fecha+KPI hardcoded.
+  // V1/V2 = data 14-may · 12 checklists (histórico). V3/V4 = data 18-may · 14 checklists (live actual).
+  // Se aplica al cambiar de modo individual.
+  function applyVersionData(version) {
+    const isNew = (version === 'v3' || version === 'v4');
+    const dateText = isNew ? 'lunes, 18 de mayo de 2026' : 'jueves, 14 de mayo de 2026';
+    const totalChecks = isNew ? '14' : '12';
+    const itemDate = isNew ? '2026-05-18' : '2026-05-14';
+
+    // greeting (fecha)
+    document.querySelectorAll('#page-mi-dia .greeting').forEach(el => {
+      if (el.textContent.match(/de mayo de 2026/)) el.textContent = dateText;
+    });
+
+    // primer KPI número (12 → 14 según versión)
+    document.querySelectorAll('#page-mi-dia .kpi-num.warn').forEach(el => {
+      if (el.textContent.trim() === '12' || el.textContent.trim() === '14') {
+        // solo cambiar el primero (que es "checklists pendientes")
+        const lbl = el.parentElement ? el.parentElement.textContent : '';
+        if (lbl.includes('checklists')) el.textContent = totalChecks;
+      }
+    });
+
+    // fechas en items v1-checklist-row (lista plana)
+    document.querySelectorAll('#page-mi-dia .v1-checklist-row span').forEach(el => {
+      if (el.textContent.match(/— 2026-05-\d+/)) {
+        el.textContent = el.textContent.replace(/2026-05-\d+/, itemDate);
+      }
+    });
+
+    // task-meta dentro de v2-only (mantiene contexto)
+    // (los grupos v2 no llevan fecha visible · no se tocan)
+
+    // sparkline v4 en el KPI de 68% prom
+    document.querySelectorAll('#page-mi-dia .v2-only .kpi-tile .label').forEach(el => {
+      if (el.textContent === 'semana promedio' || el.textContent.startsWith('semana promedio')) {
+        el.innerHTML = isNew && version === 'v4'
+          ? 'semana promedio · <span style="font-family:monospace;color:var(--v2-brand);">▁▂▃▅▆▇▆</span>'
+          : 'semana promedio';
+      }
+    });
   }
 
   function showOnly(viewId) {
