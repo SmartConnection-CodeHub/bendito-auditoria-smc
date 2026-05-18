@@ -1120,24 +1120,43 @@
   }
 
   /* ===== V3/V4 PIXEL-COPY del live Sergio (2026-05-18) =====
-     Gradient amarillo-coral-pink en ítems checklist + chips "0% Pendiente" estilo capreichito */
+     Fondo AMBIENTAL difuminado (blob radial naranja+violeta+rosa) en el .main
+     Items semitransparentes encima · chips "Pendiente" suaves */
+  body[data-version="v3"] .main,
+  body[data-version="v4"] .main {
+    background:
+      radial-gradient(circle at 75% 35%, rgba(168,85,247,0.28) 0%, transparent 45%),
+      radial-gradient(circle at 25% 60%, rgba(251,191,36,0.22) 0%, transparent 50%),
+      radial-gradient(circle at 60% 80%, rgba(236,72,153,0.18) 0%, transparent 45%),
+      linear-gradient(135deg, #FBF7FF 0%, #FFF7ED 100%);
+    background-attachment: fixed;
+  }
   body[data-version="v3"] .v1-checklist-row,
   body[data-version="v4"] .v1-checklist-row,
   body[data-version="v3"] .v2-task-card,
   body[data-version="v4"] .v2-task-card {
-    background: linear-gradient(90deg, #FEF3C7 0%, #FED7AA 35%, #FBCFE8 100%) !important;
-    border-color: #FDE68A !important;
-    border-radius: 12px !important;
+    background: rgba(255,255,255,0.55) !important;
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    border: 1px solid rgba(255,255,255,0.6) !important;
+    border-radius: 14px !important;
+    box-shadow: 0 1px 3px rgba(168,85,247,0.06);
   }
   body[data-version="v3"] .v1-checklist-row span:last-child,
   body[data-version="v4"] .v1-checklist-row span:last-child {
-    background: linear-gradient(135deg, #FEF3C7, #FDE68A);
-    border: 1px solid #FCD34D;
+    background: #FEF3C7;
+    border: 1px solid #FDE68A;
     border-radius: 999px;
-    padding: 3px 11px;
+    padding: 3px 10px;
     color: #92400E;
     font-weight: 700;
     font-size: 11px !important;
+  }
+  body[data-version="v3"] .kpi-tile,
+  body[data-version="v4"] .kpi-tile {
+    background: rgba(255,255,255,0.7) !important;
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
   }
   body[data-version="v3"] .greeting,
   body[data-version="v4"] .greeting {
