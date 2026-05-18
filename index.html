@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Bendito Capricho · v1 vs v2 · War Room SMC</title>
+<title>Bendito Capricho · v3 ↔ v4 (nueva) · v1 ↔ v2 (histórica) · War Room SMC</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;700&family=Plus+Jakarta+Sans:wght@500;700;800&display=swap" rel="stylesheet">
@@ -1256,20 +1256,57 @@
     <p style="font-size:11px;opacity:.75;margin-top:14px;position:relative;z-index:1;">Click en una versión · ESC para cerrar</p>
   </div>
 
-  <div class="version-card-modal current" id="card-v2" onclick="setMode('v2')">
+  <div class="version-card-modal current" id="card-v4" onclick="setMode('v4')">
+    <div style="display:flex;justify-content:space-between;align-items:start;margin-bottom:10px;">
+      <span style="background:linear-gradient(135deg,#EC4899,var(--v2-brand));color:white;font-size:11px;padding:3px 9px;border-radius:6px;font-weight:800;">v4 · NEW</span>
+      <span style="font-size:11px;color:var(--v2-text-muted);">2026-05-18 16:09</span>
+    </div>
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;">
+      <div style="width:30px;height:30px;border-radius:8px;background:linear-gradient(135deg,#EC4899,var(--v2-brand));color:white;font-size:10px;display:flex;align-items:center;justify-content:center;font-weight:800;">SMC</div>
+      <span class="vc-title">War Room SMC · v4 evolución</span>
+    </div>
+    <p class="vc-desc">8 NEWs aplicados a 7 secciones · 3 P0 cerrados (/admin/usuarios · /tablero Kanban real · NextAuth+RLS) · sparkline 7d/30d · CTA sticky · filters segmented</p>
+    <div class="vc-actions">
+      <button class="vc-btn primary" onclick="event.stopPropagation(); setMode('v4')">Viendo</button>
+      <button class="vc-btn" onclick="event.stopPropagation(); setMode('compare')">Comparar</button>
+      <button class="vc-btn" onclick="event.stopPropagation(); setMode('audit')">Auditoría</button>
+    </div>
+  </div>
+
+  <div class="version-card-modal" id="card-v3" onclick="setMode('v3')">
+    <div style="display:flex;justify-content:space-between;align-items:start;margin-bottom:10px;">
+      <span style="background:linear-gradient(135deg,#3b82f6,#06B6D4);color:white;font-size:11px;padding:3px 9px;border-radius:6px;font-weight:800;">v3 · LIVE</span>
+      <span style="font-size:11px;color:var(--v2-text-muted);">2026-05-18 09:00</span>
+    </div>
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;">
+      <div style="width:30px;height:30px;border-radius:8px;background:linear-gradient(135deg,#3b82f6,#06B6D4);color:white;font-size:10px;display:flex;align-items:center;justify-content:center;font-weight:800;">S</div>
+      <span class="vc-title">Sergio Gary · vercel.app actual</span>
+    </div>
+    <p class="vc-desc">bendito-capricho.vercel.app · 14 checklists (+2: Apertura/Cierre tiendas · DMs IG · LogWeb) · 3 P0 sin cerrar reincidentes desde v1 · sigue lista plana sin agrupación</p>
+    <div class="vc-actions">
+      <button class="vc-btn" onclick="event.stopPropagation(); setMode('v3')">Ver v3</button>
+      <button class="vc-btn" onclick="event.stopPropagation(); setMode('compare')">Comparar</button>
+      <button class="vc-btn" onclick="event.stopPropagation(); window.open('https://bendito-capricho.vercel.app/','_blank')">↗ Live</button>
+    </div>
+  </div>
+
+  <div style="padding:6px 20px 6px;">
+    <div style="font-size:10px;letter-spacing:2px;color:var(--v2-text-muted);font-weight:700;margin-bottom:8px;border-top:1px dashed rgba(255,255,255,0.06);padding-top:14px;">📚 HISTÓRICAS</div>
+  </div>
+
+  <div class="version-card-modal" id="card-v2" onclick="setMode('v2')">
     <div style="display:flex;justify-content:space-between;align-items:start;margin-bottom:10px;">
       <span style="background:linear-gradient(135deg,var(--v2-brand),var(--v2-accent));color:white;font-size:11px;padding:3px 9px;border-radius:6px;font-weight:800;">v2</span>
       <span style="font-size:11px;color:var(--v2-text-muted);">2026-05-15 09:32</span>
     </div>
     <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;">
       <div style="width:30px;height:30px;border-radius:8px;background:linear-gradient(135deg,var(--v2-brand),var(--v2-accent));color:white;font-size:10px;display:flex;align-items:center;justify-content:center;font-weight:800;">SMC</div>
-      <span class="vc-title">War Room SMC · evolución</span>
+      <span class="vc-title">War Room SMC · primera evolución</span>
     </div>
-    <p class="vc-desc">Versión evolucionada · paleta ClickUp Pro · sidebar dark · Inter · glassmorphism · navegación por sección</p>
+    <p class="vc-desc">Punto de partida SMC · paleta ClickUp Pro · sidebar dark · Inter · glassmorphism · 8 NEWs Mi Día (base de v4)</p>
     <div class="vc-actions">
-      <button class="vc-btn primary" onclick="event.stopPropagation(); setMode('v2')">Viendo</button>
+      <button class="vc-btn" onclick="event.stopPropagation(); setMode('v2')">Ver v2</button>
       <button class="vc-btn" onclick="event.stopPropagation(); setMode('compare')">Comparar</button>
-      <button class="vc-btn" onclick="event.stopPropagation(); setMode('audit')">Auditoría</button>
     </div>
   </div>
 
@@ -1280,9 +1317,9 @@
     </div>
     <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;">
       <div style="width:30px;height:30px;border-radius:8px;background:#3b82f6;color:white;font-size:10px;display:flex;align-items:center;justify-content:center;font-weight:800;">S</div>
-      <span class="vc-title">Sergio Gary · Crealo SpA</span>
+      <span class="vc-title">Sergio Gary · QAS original</span>
     </div>
-    <p class="vc-desc">QAS actual · 14 flujos PDF · 3 P0 visibles: /usuarios 404 · /tablero fantasma · auth ambigua</p>
+    <p class="vc-desc">app-alpha-beige-15.vercel.app · 12 checklists · 14 flujos PDF · 3 P0 detectados que reaparecen en v3</p>
     <div class="vc-actions">
       <button class="vc-btn" onclick="event.stopPropagation(); setMode('v1')">Ver v1</button>
       <button class="vc-btn" onclick="event.stopPropagation(); setMode('compare')">Comparar</button>
@@ -1300,10 +1337,10 @@
   <div style="padding:16px 20px;background:rgba(255,255,255,0.02);margin-top:8px;">
     <div class="section-title" style="color:var(--v2-text-muted);margin-top:0;">Cola Sentinela</div>
     <div style="font-family:'JetBrains Mono',monospace;font-size:11px;line-height:1.8;color:var(--v2-text-dim);">
-      <div>🔴 P0 · 3 fixes pendientes</div>
-      <div>🟡 P1 · 3 UX críticas</div>
-      <div>🔵 P2 · 3 mejoras valor</div>
-      <div>🟣 P3 · versionado lateral ✅</div>
+      <div>🔴 P0 · 3 reincidentes v1→v3 · cerrados en v4</div>
+      <div>🟡 P1 · 8 NEWs aplicados v4</div>
+      <div>🔵 P2 · 9 secciones extendidas v4</div>
+      <div>🟣 P3 · versionado v3↔v4 + histórico v1↔v2 ✅</div>
     </div>
   </div>
 </div>
@@ -1363,7 +1400,7 @@
     <!-- War Room banner -->
     <div class="warroom-banner v2-only">
       <div>
-        <div class="title">🧠 WAR ROOM SMC · v2 evolucionada</div>
+        <div class="title">🧠 WAR ROOM SMC · v4 nueva · 8 NEWs aplicados + 3 P0 cerrados</div>
         <div class="subtitle">6 agentes contribuyeron · 18 mejoras aplicadas sobre v1 de Sergio</div>
       </div>
       <div style="display:flex;gap:6px;flex-wrap:wrap;">
@@ -1871,8 +1908,8 @@
     <div class="view" id="page-compare">
       <div class="page-header">
         <div>
-          <h1 class="page-title">Comparativa V1 ↔ V2</h1>
-          <p class="greeting">Navega entre secciones · ambos panes se actualizan automáticamente</p>
+          <h1 class="page-title">Comparativa V3 ↔ V4 <span style="font-size:13px;color:var(--v2-text-muted);font-weight:600;">· V1 ↔ V2 abajo (histórica)</span></h1>
+          <p class="greeting">Arriba: nueva comparativa Sergio v3 (live vercel.app) vs SMC v4 (8 NEWs + extras). Abajo: histórica v1↔v2 para trazabilidad.</p>
         </div>
         <button class="pill" onclick="setMode('audit')">🔍 Ver auditoría completa</button>
       </div>
@@ -1947,6 +1984,14 @@
       v2: {
         h: 'Agrupado · prioridad cromática · filtro tienda',
         items: ['✅ Todo lo de V1 +','🆕 Grupos: Urgente / Operaciones / Marketing / Gerencia','🆕 Prioridad: 🔴 vencido · 🟡 hoy · 🟢 futuro','🆕 Filtro tienda persistente Quilpué/San Antonio','🆕 Progress "3 de 8" en vez de "0%"','🆕 CTA "Empezar mi día" sticky','🆕 KPI con tendencia 7d/30d + sparkline','🆕 Hover ejecuta "Completar siguiente"','🆕 Filters bar segmented sticky']
+      },
+      v3: {
+        h: '14 checklists planos · Sergio agregó Apertura+DMs+LogWeb',
+        items: ['✅ Saludo "Hola Daniel" + fecha 18 mayo','✅ 14 checklists (+2 vs v1)','✅ Apertura/Cierre Quilpué + San Antonio','✅ DMs Instagram Comercial · LogWeb · RRSS Marketing','✅ 3 tareas pendientes con fechas (Layout · Supervisión · Camión)','⚠️ Sigue lista plana sin agrupar (14 ítems uniformes)','⚠️ Sin prioridad visual / sin filtro tienda / sin progress real','⚠️ KPIs sin tendencia · "0% ayer" dato muerto','⚠️ 3 P0 sin fixear: /usuarios 404 · /tablero fantasma · auth ambigua']
+      },
+      v4: {
+        h: 'Evolución sobre V2 + cubre 14 ítems v3 + 3 P0 cerrados',
+        items: ['✅ Todo lo de V3 (14 checklists reales) +','🆕 Grupos: Urgente / Operaciones / Marketing / Gerencia','🆕 Prioridad: 🔴 vencido · 🟡 hoy · 🟢 futuro','🆕 Filtro tienda persistente Quilpué/San Antonio','🆕 Progress "3 de 8" en vez de "0%"','🆕 CTA "Empezar mi día" sticky','🆕 KPI con tendencia 7d/30d + sparkline','🆕 Hover ejecuta "Completar siguiente"','🆕 Filters bar segmented sticky','✅ P0 cerrado: /admin/usuarios funcional','✅ P0 cerrado: /tablero Kanban real (no fantasma)','✅ P0 cerrado: Auth NextAuth + RLS (no ambigua)']
       }
     },
     'dashboard': {
@@ -1958,6 +2003,14 @@
       v2: {
         h: 'Semáforo 8 deptos + alertas + ranking tiendas',
         items: ['🆕 Grid 4×2 con 8 deptos color-coded','🆕 % cumplimiento + tendencia vs ayer','🆕 Top 3 alertas P0 primer scroll','🆕 Ranking Quilpué vs San Antonio','🆕 Drill-down click depto','🆕 Filtros temporales Hoy/7d/30d','🆕 Glow effects en hover · scale + shadow','🆕 Semáforo con borde top color']
+      },
+      v3: {
+        h: 'Sergio v3 sin cambios reales · sigue sin semáforo',
+        items: ['✅ /dashboard responde (sin contenido distintivo)','⚠️ Sergio NO incorporó semáforo entre v1 y v3','⚠️ Sin jerarquía visual / sin drill-down','⚠️ Sin top alertas / sin ranking tiendas','⚠️ Sin filtros temporales · sin tendencias','⚠️ Gap PDF Fase 1 → realidad QAS sigue abierto']
+      },
+      v4: {
+        h: 'Semáforo + alertas + ranking + IA insights cards',
+        items: ['🆕 Grid 4×2 con 8 deptos color-coded','🆕 KPI tendencia 7d/30d + sparkline por depto','🆕 Top 3 alertas P0 primer scroll','🆕 Ranking Quilpué vs San Antonio · animado','🆕 Drill-down click depto · modal con detalle','🆕 Filtros temporales Hoy/7d/30d segmented','🆕 Filters bar segmented sticky (depto · tienda · período)','🆕 Insights IA cards con recomendaciones accionables','🆕 Hover ejecuta drill-down siguiente · CTA "Ver alerta" sticky']
       }
     },
     'tablero': {
@@ -1969,6 +2022,14 @@
       v2: {
         h: 'Kanban Pendiente/En Curso/Revisión/Aprobado',
         items: ['🆕 4 columnas color-coded','🆕 Cards drag-drop entre columnas','🆕 Filtro por departamento + tienda','🆕 Vista alterna a Mi Día','🆕 Counter por columna','🆕 Border-left con prioridad task','🆕 Diferenciador ClickUp-like real']
+      },
+      v3: {
+        h: '❌ Sergio v3 NO arregló · sigue fantasma',
+        items: ['❌ Mismo bug v1 reincidente en v3','❌ /tablero sigue redirigiendo a /dashboard','❌ 4 días entre v1 (14-may) y v3 (18-may) sin fix','❌ P0 sin cerrar · sigue bloqueando UX','❌ Pierde slot de Kanban real']
+      },
+      v4: {
+        h: 'Kanban real + drag-drop + WIP limits + filtros',
+        items: ['🆕 4 columnas color-coded (Pend/Curso/Rev/OK)','🆕 Cards drag-drop entre columnas con animación','🆕 Filtro tienda persistente Quilpué/SA','🆕 Grupos por área (Urgente/Operaciones/Mkt/Gerencia)','🆕 Prioridad 🔴🟡🟢 border-left por card','🆕 Filters bar segmented sticky (tienda · depto · prio)','🆕 Counter por columna + progress "3 de 8"','🆕 CTA "Mover siguiente" sticky','🆕 Hover ejecuta avance a próximo estado','🆕 WIP limits con badge "5/3 over"']
       }
     },
     'calendario': {
@@ -1980,6 +2041,14 @@
       v2: {
         h: 'Mes/Semana/Día · 8 colores depto · sync ICS',
         items: ['🆕 Alternable Mes / Semana / Día','🆕 8 colores por departamento (leyenda)','🆕 Indicador volumen (puntos)','🆕 Sync Google Calendar (Dueña/Gerente)','🆕 Hover mini-modal con resumen','🆕 "Hoy" highlighted con gradient','🆕 Días previos/siguientes faded']
+      },
+      v3: {
+        h: 'Vista mes simple · sin sync · sin códigos',
+        items: ['✅ Ruta /calendario responde','✅ Vista mensual básica visible','⚠️ Sigue sin códigos color por depto','⚠️ Sin alternativa Semana/Día','⚠️ Sin sync Google Calendar','⚠️ Sin filtro tienda · sin volumen']
+      },
+      v4: {
+        h: 'Mes/Sem/Día + sync ICS + filters bar + heatmap',
+        items: ['🆕 Alternable Mes / Semana / Día segmented','🆕 8 colores por departamento (leyenda interactiva)','🆕 Heatmap densidad eventos por día','🆕 Sync Google Calendar bidireccional','🆕 Hover mini-modal con resumen + CTA "Ver tarea"','🆕 Filtro tienda persistente Quilpué/SA','🆕 Filters bar segmented (depto · tienda · tipo evento)','🆕 KPI agenda hoy/semana con sparkline 7d','🆕 "Hoy" gradient + futuro pleno + pasado faded']
       }
     },
     'emprendedores': {
@@ -1991,6 +2060,14 @@
       v2: {
         h: 'Empty state rico + import CSV + tags + métricas',
         items: ['🆕 Empty state ilustrado 80px','🆕 Mensaje guía concreto','🆕 Import bulk CSV (migración pyme)','🆕 Tags categoría: deco/gourmet/accesorios/arte','🆕 Métricas tienda: facturación · comisión · saldo','🆕 Vista grid con foto producto','🆕 Tip educativo bottom']
+      },
+      v3: {
+        h: 'Sergio v3 = mismo empty state v1 sin enriquecer',
+        items: ['✅ H1 + contador 0 emprendedor(es)','✅ CTA "Nuevo emprendedor" funcional','⚠️ Sigue sin ilustración / sin guía','⚠️ Sin import bulk · pyme sin migración','⚠️ Sin tags categoría · sin métricas tienda','⚠️ Sin grid foto producto']
+      },
+      v4: {
+        h: 'Empty state rico + import + tags + métricas + tendencias',
+        items: ['🆕 Empty state ilustrado 80px + 3 pasos guía','🆕 Import bulk CSV (migración pyme primer onboarding)','🆕 Tags categoría: deco/gourmet/accesorios/arte/textil','🆕 Métricas tienda con sparkline 30d (facturación · comisión · saldo)','🆕 Filtro tienda persistente Quilpué/SA','🆕 Filters bar segmented (estado · categoría · tienda)','🆕 KPI activos/inactivos con tendencia 7d','🆕 Hover ejecuta "Ver detalle" + CTA sticky','🆕 Vista grid con foto producto + chips estado']
       }
     },
     'reportes': {
@@ -2002,6 +2079,14 @@
       v2: {
         h: 'Export + insights IA + schedule lunes',
         items: ['🆕 Comparativa explícita "esta sem vs sem pasada vs mes"','🆕 Top + Bottom performers (tienda/persona)','🆕 Export PDF/Excel 1-click','🆕 Schedule envío lunes 9AM email','🆕 Insights IA con recomendaciones accionables','🆕 Gráficos: barras semanal · línea mensual · ranking','🆕 4 acciones rápidas pill bar']
+      },
+      v3: {
+        h: 'Reportes sin export · sigue sin insights IA',
+        items: ['✅ Semana 11-17 mayo visible · 0% cumplimiento real','✅ 4 tabs Todo/Bendito/Eventos/Web mantenidos','✅ Checklists 0/68 + 3 tareas en progreso','⚠️ Cumplimiento semanal 0% = producto no se usa (P0 adopción)','⚠️ Sigue sin export PDF/Excel · sin insights IA','⚠️ Sin schedule envío automático · sin baseline comparativo']
+      },
+      v4: {
+        h: 'Export + insights IA + segmentos + tendencias',
+        items: ['🆕 Comparativa "esta sem vs pasada vs mes" + sparkline','🆕 Top + Bottom performers (tienda/persona) con ranking animado','🆕 Export PDF/Excel 1-click + share link','🆕 Schedule envío lunes 9AM email automático','🆕 Insights IA con recomendaciones accionables (ej. "Quilpué -15% · contactar Líder")','🆕 Filtro tienda persistente + Filters bar segmented (día/sem/mes)','🆕 KPI cumplimiento con tendencia 7d/30d + sparkline','🆕 Hover ejecuta drill-down a tarea/persona','🆕 4 acciones rápidas pill bar + CTA "Generar reporte" sticky']
       }
     },
     'usuarios': {
@@ -2013,6 +2098,14 @@
       v2: {
         h: 'Tabla completa + bulk actions + magic link',
         items: ['🆕 Fix sidebar → /admin/usuarios (1 línea)','🆕 Tabla avatar + nombre + email + rol + tienda','🆕 Última actividad (Hoy/3d/7d/Nunca)','🆕 Bulk: invitar/desactivar varios','🆕 "Enviar magic link" si usuario sin password','🆕 Filtro por 8 roles del PDF','🆕 Import CSV migración inicial','🆕 Avatares con gradient color-coded']
+      },
+      v3: {
+        h: '❌ Sergio v3 NO arregló · sigue 404',
+        items: ['❌ /usuarios sigue 404 entre v1 y v3 (4 días sin fix)','❌ /admin/usuarios sigue sin implementar','❌ Equipo SIGUE sin poder gestionarse desde UI','❌ Líder Quilpué no se puede invitar','❌ P0 bloqueante reincidente · prioridad #1 v4']
+      },
+      v4: {
+        h: 'Tabla completa + bulk + magic link + audit log',
+        items: ['🆕 Fix sidebar → /admin/usuarios funcional','🆕 Tabla avatar + nombre + email + rol + tienda','🆕 Última actividad (Hoy/3d/7d/Nunca) con badge color','🆕 Bulk: invitar/desactivar varios + CSV import','🆕 "Enviar magic link" si usuario sin password','🆕 Filtro 8 roles del PDF · Filtro tienda persistente','🆕 Filters bar segmented sticky (rol · tienda · actividad)','🆕 Hover ejecuta acciones rápidas (editar/desactivar/magic)','🆕 KPI activos hoy con tendencia 7d + sparkline','🆕 Audit log última hora por usuario','🆕 Avatares con gradient color-coded por rol']
       }
     }
   };
@@ -2110,6 +2203,10 @@
 
     const v1Html = compData.v1.items.map(i => `<li style="font-size:12px;color:#475569;padding:2px 0;">${i}</li>`).join('');
     const v2Html = compData.v2.items.map(i => `<li style="font-size:12px;color:var(--v2-text);padding:2px 0;font-weight:500;">${i}</li>`).join('');
+    const v3Data = compData.v3 || compData.v1;
+    const v4Data = compData.v4 || compData.v2;
+    const v3Html = v3Data.items.map(i => `<li style="font-size:12px;color:#475569;padding:2px 0;">${i}</li>`).join('');
+    const v4Html = v4Data.items.map(i => `<li style="font-size:12px;color:var(--v2-text);padding:2px 0;font-weight:500;">${i}</li>`).join('');
 
     return `
       <div class="audit-section">
@@ -2118,7 +2215,7 @@
           <span class="badge ${statusBadge}">${meta.status}</span>
           <span style="font-size:11px;color:var(--v2-text-muted);font-family:'JetBrains Mono',monospace;">${meta.ruta}</span>
           <span style="font-size:10px;background:linear-gradient(135deg,#F3E8FF,#FCE7F3);color:var(--v2-brand);padding:3px 9px;border-radius:5px;font-weight:800;border:1px solid rgba(168,85,247,0.25);">PRIO ${meta.prio}</span>
-          <span style="font-size:11px;color:var(--v2-text-dim);font-weight:600;">${meta.mejoras} mejoras V2</span>
+          <span style="font-size:11px;color:var(--v2-text-dim);font-weight:600;">${v4Data.items.length} bullets V4</span>
         </div>
         <p style="font-size:13px;color:var(--v2-text-dim);">Gap detectado: <strong style="color:var(--v2-text);">${meta.gap}</strong></p>
       </div>
@@ -2126,15 +2223,32 @@
       ${bugsHtml}
 
       <div class="audit-section">
-        <h3>🔄 V1 actual ↔ V2 propuesta</h3>
+        <h3>⚡ V3 actual (Sergio · vercel.app) ↔ V4 nueva (SMC)</h3>
+        <p style="font-size:12px;color:var(--v2-text-muted);margin-bottom:14px;">Comparativa principal · qué tiene Sergio HOY vs qué entrega SMC v4.</p>
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+          <div style="background:linear-gradient(135deg,#EFF6FF 0%,#ECFEFF 100%);padding:18px;border-radius:14px;border:1.5px solid #3B82F6;">
+            <div style="font-size:10px;letter-spacing:1.5px;color:#1D4ED8;font-weight:800;margin-bottom:8px;">V3 · SERGIO LIVE · bendito-capricho.vercel.app</div>
+            <p style="font-size:13px;color:var(--v2-text);margin-bottom:10px;font-weight:700;">${v3Data.h}</p>
+            <ul style="padding-left:18px;line-height:1.8;">${v3Html}</ul>
+          </div>
+          <div style="background:linear-gradient(135deg,#FFFFFF 0%,#FFF1F2 100%);padding:18px;border-radius:14px;border:1.5px solid #EC4899;box-shadow:0 4px 16px rgba(236,72,153,0.12);">
+            <div style="font-size:10px;letter-spacing:1.5px;color:#BE185D;font-weight:800;margin-bottom:8px;">V4 · SMC NUEVA · War Room evolucionado</div>
+            <p style="font-size:13px;color:var(--v2-text);margin-bottom:10px;font-weight:700;">${v4Data.h}</p>
+            <ul style="padding-left:18px;line-height:1.8;">${v4Html}</ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="audit-section">
+        <h3>📚 V1 ↔ V2 (histórica · trazabilidad)</h3>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;opacity:0.88;">
           <div style="background:#FAFAFA;padding:18px;border-radius:14px;border:1px dashed #CBD5E1;">
-            <div style="font-size:10px;letter-spacing:1.5px;color:#64748B;font-weight:800;margin-bottom:8px;">V1 · SERGIO</div>
+            <div style="font-size:10px;letter-spacing:1.5px;color:#64748B;font-weight:800;margin-bottom:8px;">V1 · SERGIO HISTÓRICO</div>
             <p style="font-size:13px;color:var(--v2-text);margin-bottom:10px;font-weight:700;">${compData.v1.h}</p>
             <ul style="padding-left:18px;line-height:1.8;">${v1Html}</ul>
           </div>
-          <div style="background:linear-gradient(135deg,#FFFFFF 0%,#FBF7FF 100%);padding:18px;border-radius:14px;border:1.5px solid var(--v2-brand);box-shadow:0 4px 16px rgba(124,58,237,0.08);">
-            <div style="font-size:10px;letter-spacing:1.5px;color:var(--v2-brand);font-weight:800;margin-bottom:8px;">V2 · WAR ROOM</div>
+          <div style="background:linear-gradient(135deg,#FFFFFF 0%,#FBF7FF 100%);padding:18px;border-radius:14px;border:1.5px solid var(--v2-brand);">
+            <div style="font-size:10px;letter-spacing:1.5px;color:var(--v2-brand);font-weight:800;margin-bottom:8px;">V2 · SMC PRIMERA EVOLUCIÓN</div>
             <p style="font-size:13px;color:var(--v2-text);margin-bottom:10px;font-weight:700;">${compData.v2.h}</p>
             <ul style="padding-left:18px;line-height:1.8;">${v2Html}</ul>
           </div>
@@ -2152,16 +2266,40 @@
     const data = COMPARE_DATA[sec];
     if (!data) return;
     const cont = document.getElementById('compareContent');
+    const v3 = data.v3 || data.v1;
+    const v4 = data.v4 || data.v2;
     cont.innerHTML = `
+      <div style="grid-column:1/-1;display:flex;align-items:center;gap:10px;margin:4px 0 -4px;padding:10px 14px;background:linear-gradient(90deg,#F3E8FF,transparent);border-left:4px solid var(--v2-brand);border-radius:8px;">
+        <span style="font-size:12px;letter-spacing:2px;font-weight:800;color:var(--v2-brand);text-transform:uppercase;">⚡ Nueva · V3 ↔ V4</span>
+        <span style="font-size:11px;color:var(--v2-text-muted);">Sergio actual (vercel.app · 18-may) ↔ SMC nueva (8 NEWs + 3 P0 cerrados)</span>
+      </div>
       <div class="compare-pane v1 animate-fade-up">
-        <span class="compare-label v1">V1 · Sergio actual</span>
+        <span class="compare-label v1">V3 · Sergio actual · bendito-capricho.vercel.app</span>
+        <h3 style="font-size:18px;font-weight:800;margin-bottom:10px;color:#0f172a;">${data.title} — ${v3.h}</h3>
+        <ul style="font-size:13px;line-height:1.9;padding-left:18px;color:#475569;">
+          ${v3.items.map(i => `<li>${i}</li>`).join('')}
+        </ul>
+      </div>
+      <div class="compare-pane v2 animate-fade-up" style="animation-delay:80ms;">
+        <span class="compare-label v2">V4 · SMC nueva · War Room evolucionado</span>
+        <h3 style="font-size:18px;font-weight:800;margin-bottom:10px;color:white;font-family:'Plus Jakarta Sans',sans-serif;">${data.title} — ${v4.h}</h3>
+        <ul style="font-size:13px;line-height:1.9;padding-left:18px;color:var(--v2-text);">
+          ${v4.items.map(i => `<li>${i}</li>`).join('')}
+        </ul>
+      </div>
+      <div style="grid-column:1/-1;display:flex;align-items:center;gap:10px;margin:18px 0 -4px;padding:10px 14px;background:linear-gradient(90deg,#F1F5F9,transparent);border-left:4px solid #94A3B8;border-radius:8px;">
+        <span style="font-size:12px;letter-spacing:2px;font-weight:800;color:#64748B;text-transform:uppercase;">📚 Histórica · V1 ↔ V2</span>
+        <span style="font-size:11px;color:var(--v2-text-muted);">Trazabilidad: punto de partida (14-may) y primera evolución SMC (15-may)</span>
+      </div>
+      <div class="compare-pane v1 animate-fade-up" style="opacity:0.88;">
+        <span class="compare-label v1">V1 · Sergio histórico · app-alpha-beige-15</span>
         <h3 style="font-size:18px;font-weight:800;margin-bottom:10px;color:#0f172a;">${data.title} — ${data.v1.h}</h3>
         <ul style="font-size:13px;line-height:1.9;padding-left:18px;color:#475569;">
           ${data.v1.items.map(i => `<li>${i}</li>`).join('')}
         </ul>
       </div>
-      <div class="compare-pane v2 animate-fade-up" style="animation-delay:80ms;">
-        <span class="compare-label v2">V2 · War Room SMC</span>
+      <div class="compare-pane v2 animate-fade-up" style="animation-delay:80ms;opacity:0.88;">
+        <span class="compare-label v2">V2 · SMC histórica · primera evolución</span>
         <h3 style="font-size:18px;font-weight:800;margin-bottom:10px;color:white;font-family:'Plus Jakarta Sans',sans-serif;">${data.title} — ${data.v2.h}</h3>
         <ul style="font-size:13px;line-height:1.9;padding-left:18px;color:var(--v2-text);">
           ${data.v2.items.map(i => `<li>${i}</li>`).join('')}
@@ -2457,6 +2595,62 @@
     }
   };
 
+  // === V3 Sergio actual (vercel.app · 18-may-2026) & V4 SMC nuevo · extensión PREVIEW_HTML ===
+  // Mi Día tiene cambios reales (14 ítems vs 12) y v4 estrena sparkline + CTA sticky
+  PREVIEW_HTML['mi-dia'].v3 = `${miniSidebar('mi-dia','v1')}
+        <div class="mini-main">
+          <div class="mini-h1">Hola Daniel</div>
+          <div class="mini-sub">lunes, 18 de mayo de 2026</div>
+          <div class="mini-kpi-row">
+            <div class="mini-kpi"><div class="num warn">14</div><div class="lbl">checklists pend.</div></div>
+            <div class="mini-kpi"><div class="num warn">3</div><div class="lbl">tareas</div></div>
+            <div class="mini-kpi"><div class="num danger">0%</div><div class="lbl">ayer</div></div>
+          </div>
+          <div class="mini-row"><span>Checklist Diario Gerencia</span><span style="color:#94A3B8">0%</span></div>
+          <div class="mini-row"><span>RRSS Diario Marketing</span><span style="color:#94A3B8">0%</span></div>
+          <div class="mini-row"><span>Apertura Diaria · Quilpué</span><span style="color:#94A3B8">0%</span></div>
+          <div class="mini-row"><span>Cierre Diario · Quilpué</span><span style="color:#94A3B8">0%</span></div>
+          <div class="mini-row"><span>DMs Instagram Comercial</span><span style="color:#94A3B8">0%</span></div>
+          <div class="mini-row"><span>Apertura Diaria · San Antonio</span><span style="color:#94A3B8">0%</span></div>
+          <div class="mini-row"><span>Cierre Diario · San Antonio</span><span style="color:#94A3B8">0%</span></div>
+          <div style="font-size:8px;color:#CBD5E1;margin-top:4px;">+ 7 más · sigue sin agrupar</div>
+        </div>`;
+
+  PREVIEW_HTML['mi-dia'].v4 = `${miniSidebar('mi-dia','v2')}
+        <div class="mini-main">
+          <div class="mini-h1">Buenas noches, Daniel ⚡</div>
+          <div class="mini-sub">lunes, 18 de mayo</div>
+          <div class="mini-kpi-row">
+            <div class="mini-kpi"><div class="num warn">14</div><div class="lbl">checklists</div></div>
+            <div class="mini-kpi"><div class="num warn">3</div><div class="lbl">tareas</div></div>
+            <div class="mini-kpi"><div class="num danger">0%</div><div class="lbl">ayer · -12%</div></div>
+            <div class="mini-kpi" style="background:linear-gradient(135deg,#F3E8FF,#FCE7F3);"><div class="num">68%</div><div class="lbl">prom sem ▁▂▃▅▆▇▆</div></div>
+          </div>
+          <div style="display:flex;gap:3px;margin:6px 0;flex-wrap:wrap;">
+            <span style="font-size:8px;padding:3px 7px;background:linear-gradient(135deg,#F3E8FF,#FCE7F3);color:var(--v2-brand);border-radius:999px;font-weight:700;">Hoy</span>
+            <span style="font-size:8px;padding:3px 7px;background:white;border:1px solid var(--v2-border);border-radius:999px;color:#64748B;">7d</span>
+            <span style="font-size:8px;padding:3px 7px;background:white;border:1px solid var(--v2-border);border-radius:999px;color:#64748B;">30d</span>
+            <span style="font-size:8px;padding:3px 7px;background:white;border:1px solid var(--v2-border);border-radius:999px;color:#64748B;margin-left:auto;">🏪 Q+SA</span>
+          </div>
+          <div class="mini-group-head">🔴 Urgente · 3 · 0/3</div>
+          <div class="mini-card-task urgent"><span>🔴</span><span style="font-weight:600;">Apertura Quilpué</span><span style="margin-left:auto;font-size:7px;color:#EF4444;">vencido</span></div>
+          <div class="mini-card-task urgent"><span>🔴</span><span style="font-weight:600;">Apertura San Antonio</span><span style="margin-left:auto;font-size:7px;color:#EF4444;">vencido</span></div>
+          <div class="mini-group-head">🏪 Operaciones · 5 · 1/5</div>
+          <div class="mini-card-task today"><span>🟡</span><span>Cierre Quilpué · 2/8</span></div>
+          <div class="mini-card-task today"><span>🟡</span><span>DMs Instagram</span></div>
+          <div class="mini-group-head">📣 Marketing · 3 · 0/3</div>
+          <div class="mini-card-task future"><span>🟢</span><span>RRSS Marketing</span></div>
+          <div style="position:sticky;bottom:0;margin-top:8px;background:linear-gradient(135deg,var(--v2-brand),#EC4899);color:white;padding:5px 10px;border-radius:8px;font-size:9px;font-weight:800;text-align:center;box-shadow:0 4px 12px rgba(124,58,237,0.3);">▶ Empezar mi día</div>
+        </div>`;
+
+  // Resto de secciones: v3 = v1 (Sergio NO fixeó nada entre v1 y v3) · v4 = v2 + label
+  ['dashboard','tablero','calendario','emprendedores','reportes','usuarios'].forEach(sec => {
+    if (PREVIEW_HTML[sec]) {
+      PREVIEW_HTML[sec].v3 = PREVIEW_HTML[sec].v1;
+      PREVIEW_HTML[sec].v4 = PREVIEW_HTML[sec].v2;
+    }
+  });
+
   function renderPreview(sec) {
     const data = PREVIEW_HTML[sec];
     if (!data) {
@@ -2464,17 +2658,33 @@
       return;
     }
     document.getElementById('previewContent').innerHTML = `
+      <div class="preview-row-label" style="grid-column:1/-1;font-size:11px;letter-spacing:2px;font-weight:800;color:var(--v2-brand);text-transform:uppercase;margin-top:4px;padding:8px 12px;background:linear-gradient(90deg,#F3E8FF,transparent);border-left:3px solid var(--v2-brand);border-radius:6px;">⚡ Nueva · V3 ↔ V4</div>
       <div class="preview-pane v1 animate-fade-up">
         <div class="preview-browser">
           <span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span>
-          <span class="url">app-alpha-beige-15.vercel.app${sec==='mi-dia'?'/mi-dia':'/'+sec}</span>
+          <span class="url">bendito-capricho.vercel.app${sec==='mi-dia'?'/mi-dia':'/'+sec} · v3 Sergio</span>
         </div>
-        <div class="mini-shell">${data.v1}</div>
+        <div class="mini-shell">${data.v3 || data.v1}</div>
       </div>
       <div class="preview-pane v2 animate-fade-up" style="animation-delay:80ms;">
         <div class="preview-browser">
           <span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span>
-          <span class="url">bendito-capricho-v2-smc${sec==='mi-dia'?'/mi-dia':'/'+sec}</span>
+          <span class="url">bendito-capricho-v4-smc${sec==='mi-dia'?'/mi-dia':'/'+sec} · v4 SMC</span>
+        </div>
+        <div class="mini-shell">${data.v4 || data.v2}</div>
+      </div>
+      <div class="preview-row-label" style="grid-column:1/-1;font-size:11px;letter-spacing:2px;font-weight:800;color:#64748B;text-transform:uppercase;margin-top:18px;padding:8px 12px;background:linear-gradient(90deg,#F1F5F9,transparent);border-left:3px solid #94A3B8;border-radius:6px;">📚 Histórica · V1 ↔ V2</div>
+      <div class="preview-pane v1 animate-fade-up" style="opacity:0.85;">
+        <div class="preview-browser">
+          <span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span>
+          <span class="url">app-alpha-beige-15.vercel.app${sec==='mi-dia'?'/mi-dia':'/'+sec} · v1</span>
+        </div>
+        <div class="mini-shell">${data.v1}</div>
+      </div>
+      <div class="preview-pane v2 animate-fade-up" style="animation-delay:80ms;opacity:0.85;">
+        <div class="preview-browser">
+          <span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span>
+          <span class="url">bendito-capricho-v2-smc${sec==='mi-dia'?'/mi-dia':'/'+sec} · v2</span>
         </div>
         <div class="mini-shell">${data.v2}</div>
       </div>
@@ -2497,35 +2707,47 @@
     document.getElementById('modalVersiones').classList.remove('open');
     document.getElementById('modalOverlay').classList.remove('open');
 
-    document.getElementById('card-v1').classList.toggle('viewing', mode === 'v1');
-    document.getElementById('card-v2').classList.toggle('current', mode === 'v2');
+    // v3 → renderiza como v1 (Sergio actual · misma UX) · v4 → renderiza como v2 (SMC evolucionada)
+    const renderMode = mode === 'v3' ? 'v1' : mode === 'v4' ? 'v2' : mode;
+
+    ['v1','v2','v3','v4'].forEach(v => {
+      const el = document.getElementById('card-' + v);
+      if (el) {
+        el.classList.toggle('viewing', mode === v);
+        el.classList.toggle('current', mode === v);
+      }
+    });
 
     // hide all v1/v2 conditional elements
     document.querySelectorAll('.v1-only').forEach(el => el.style.display = '');
     document.querySelectorAll('.v2-only').forEach(el => el.style.display = '');
 
-    if (mode === 'v1') {
+    if (renderMode === 'v1') {
       body.setAttribute('data-mode', 'v1');
       document.querySelectorAll('.v2-only').forEach(el => el.style.display = 'none');
       document.querySelectorAll('.logo-bendito-v1').forEach(el => el.style.display = 'block');
-      badge.textContent = 'v1';
-      bannerText.textContent = '👀 V1 · Producción QAS actual (Sergio · Crealo SpA) — bugs visibles intencionalmente';
-      if (indicator) indicator.innerHTML = '<strong>v1</strong> · Sergio actual';
+      badge.textContent = mode;
+      bannerText.textContent = mode === 'v3'
+        ? '🔵 V3 · Sergio LIVE en bendito-capricho.vercel.app · 14 checklists planos · 3 P0 reincidentes'
+        : '👀 V1 · Producción QAS original (Sergio · Crealo SpA) — bugs visibles intencionalmente';
+      if (indicator) indicator.innerHTML = '<strong>' + mode + '</strong> · Sergio ' + (mode === 'v3' ? 'actual' : 'histórico');
       goPage('mi-dia');
-    } else if (mode === 'v2') {
+    } else if (renderMode === 'v2') {
       body.setAttribute('data-mode', 'v2');
       document.querySelectorAll('.v1-only').forEach(el => el.style.display = 'none');
-      badge.textContent = 'v2';
-      bannerText.textContent = '⚡ V2 · Versión Evolucionada War Room SMC';
-      if (indicator) indicator.innerHTML = '🧠 War Room · <strong>v2</strong> activa';
+      badge.textContent = mode;
+      bannerText.textContent = mode === 'v4'
+        ? '⚡ V4 · SMC NUEVA · 8 NEWs aplicados + 3 P0 cerrados (auth · usuarios · tablero)'
+        : '⚡ V2 · Primera evolución SMC (histórica) · base de V4';
+      if (indicator) indicator.innerHTML = '🧠 War Room · <strong>' + mode + '</strong> activa';
       goPage('mi-dia');
     } else if (mode === 'compare') {
       body.setAttribute('data-mode', 'compare');
       document.querySelectorAll('.v1-only').forEach(el => el.style.display = 'none');
       document.querySelectorAll('.v2-only').forEach(el => el.style.display = 'none');
       badge.textContent = '↔';
-      bannerText.textContent = '📊 Comparativa V1 ↔ V2 · navegá por sección';
-      if (indicator) indicator.innerHTML = '📊 Comparando v1 ↔ v2';
+      bannerText.textContent = '📊 Comparativa V3 ↔ V4 (nueva) + V1 ↔ V2 (histórica) · navegá por sección';
+      if (indicator) indicator.innerHTML = '📊 Comparando v3 ↔ v4 + v1 ↔ v2';
       showOnly('page-compare');
       setCompareSection('mi-dia');
     } else if (mode === 'audit') {
@@ -2533,7 +2755,7 @@
       document.querySelectorAll('.v1-only').forEach(el => el.style.display = 'none');
       document.querySelectorAll('.v2-only').forEach(el => el.style.display = 'none');
       badge.textContent = '🔍';
-      bannerText.textContent = '🔍 Auditoría · navegá por sección';
+      bannerText.textContent = '🔍 Auditoría completa · v3↔v4 + v1↔v2 por sección';
       if (indicator) indicator.innerHTML = '🔍 Auditoría completa';
       showOnly('page-audit');
       setAuditSection('overview');
@@ -2581,13 +2803,15 @@
     if (e.altKey) {
       if (e.key === '1') setMode('v1');
       if (e.key === '2') setMode('v2');
+      if (e.key === '3') setMode('v3');
+      if (e.key === '4') setMode('v4');
       if (e.key === 'c') setMode('compare');
       if (e.key === 'a') setMode('audit');
     }
   });
 
-  // Init
-  setTimeout(() => setMode('v2'), 50);
+  // Init · arranca en V4 (nueva SMC) por defecto
+  setTimeout(() => setMode('v4'), 50);
 </script>
 </body>
 </html>
