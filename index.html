@@ -2595,52 +2595,100 @@
     }
   };
 
-  // === V3 Sergio actual (vercel.app · 18-may-2026) & V4 SMC nuevo · extensión PREVIEW_HTML ===
-  // Mi Día tiene cambios reales (14 ítems vs 12) y v4 estrena sparkline + CTA sticky
-  PREVIEW_HTML['mi-dia'].v3 = `${miniSidebar('mi-dia','v1')}
+  // === V3 Sergio LIVE · COPIA FIEL de bendito-capricho.vercel.app · 18-may-2026 ===
+  // Regla 41-B (2026-05-18): V3 = pixel-copy del live Sergio · V4 = misma copia + 8 NEWs encima
+  // NO inventar elementos (sin badges 404 en sidebar · sin barras "0% Pendiente" si live no las muestra)
+  const _miDiaV3Sidebar = `<div class="mini-sidebar" style="background:linear-gradient(180deg,#F5EBFB 0%,#FBE9F1 100%);">
+    <div class="mini-logo" style="text-align:center;padding:4px 0 8px;">
+      <div style="font-family:'Plus Jakarta Sans',serif;font-style:italic;font-weight:800;color:#7C3AED;font-size:13px;line-height:1;">bendito<span style="color:#EC4899">♥</span></div>
+      <div style="font-family:'Plus Jakarta Sans',serif;font-style:italic;font-weight:800;color:#7C3AED;font-size:13px;line-height:1;margin-top:-1px;">capricho</div>
+      <div style="font-size:6px;letter-spacing:1.5px;color:#94A3B8;margin-top:3px;">— concept store —</div>
+    </div>
+    <div style="padding:6px 6px 8px;border-bottom:1px solid rgba(168,85,247,0.1);margin-bottom:6px;">
+      <div style="font-size:9px;font-style:italic;color:#7C3AED;font-weight:700;">Hola! Daniel</div>
+      <div style="font-size:7px;color:#94A3B8;">Dueña</div>
+    </div>
+    <div class="mini-link active"><span>☀️</span> Mi Día</div>
+    <div class="mini-link"><span>📊</span> Dashboard</div>
+    <div class="mini-link"><span>🃏</span> Tablero</div>
+    <div class="mini-link"><span>📅</span> Calendario</div>
+    <div class="mini-link"><span>🛍️</span> Empr.</div>
+    <div class="mini-link"><span>📈</span> Reportes</div>
+    <div class="mini-link"><span>👥</span> Usuarios</div>
+  </div>`;
+
+  PREVIEW_HTML['mi-dia'].v3 = `${_miDiaV3Sidebar}
         <div class="mini-main">
-          <div class="mini-h1">Hola Daniel</div>
+          <div style="font-size:7px;color:#94A3B8;margin-bottom:3px;">🏠 Inicio › Mi Día</div>
+          <div class="mini-h1">Buenas noches, Daniel</div>
           <div class="mini-sub">lunes, 18 de mayo de 2026</div>
-          <div class="mini-kpi-row">
-            <div class="mini-kpi"><div class="num warn">14</div><div class="lbl">checklists pend.</div></div>
-            <div class="mini-kpi"><div class="num warn">3</div><div class="lbl">tareas</div></div>
-            <div class="mini-kpi"><div class="num danger">0%</div><div class="lbl">ayer</div></div>
+          <div style="display:flex;gap:3px;margin:6px 0 8px;flex-wrap:wrap;">
+            <span style="font-size:7px;padding:3px 8px;background:white;border:1px solid #E2E8F0;border-radius:999px;font-weight:700;color:#7C3AED;">Todo</span>
+            <span style="font-size:7px;padding:3px 8px;color:#94A3B8;">🛍 Bendito Capricho</span>
+            <span style="font-size:7px;padding:3px 8px;color:#94A3B8;">🎉 Eventos</span>
+            <span style="font-size:7px;padding:3px 8px;color:#94A3B8;">🌐 Web</span>
           </div>
-          <div class="mini-row"><span>Checklist Diario Gerencia</span><span style="color:#94A3B8">0%</span></div>
-          <div class="mini-row"><span>RRSS Diario Marketing</span><span style="color:#94A3B8">0%</span></div>
-          <div class="mini-row"><span>Apertura Diaria · Quilpué</span><span style="color:#94A3B8">0%</span></div>
-          <div class="mini-row"><span>Cierre Diario · Quilpué</span><span style="color:#94A3B8">0%</span></div>
-          <div class="mini-row"><span>DMs Instagram Comercial</span><span style="color:#94A3B8">0%</span></div>
-          <div class="mini-row"><span>Apertura Diaria · San Antonio</span><span style="color:#94A3B8">0%</span></div>
-          <div class="mini-row"><span>Cierre Diario · San Antonio</span><span style="color:#94A3B8">0%</span></div>
-          <div style="font-size:8px;color:#CBD5E1;margin-top:4px;">+ 7 más · sigue sin agrupar</div>
+          <div style="display:flex;gap:4px;margin-bottom:8px;flex-wrap:wrap;">
+            <div style="background:#EFF6FF;border:1px solid #DBEAFE;border-radius:999px;padding:4px 9px;font-size:7px;color:#1E40AF;"><strong style="color:#2563EB;font-size:10px;">14</strong> checklists pendientes</div>
+            <div style="background:#FFF7ED;border:1px solid #FED7AA;border-radius:999px;padding:4px 9px;font-size:7px;color:#9A3412;"><strong style="color:#EA580C;font-size:10px;">3</strong> tareas activas</div>
+            <div style="background:#F8FAFC;border:1px solid #E2E8F0;border-radius:999px;padding:4px 9px;font-size:7px;color:#475569;"><strong style="color:#334155;font-size:10px;">0%</strong> completado ayer</div>
+          </div>
+          <div style="font-size:7px;letter-spacing:1.5px;color:#94A3B8;font-weight:700;margin:4px 0 6px;">MIS CHECKLISTS DE HOY</div>
+          ${['Checklist Diario Gerencia','Checklist Semanal Gerencia','Checklist Diario Finanzas','RRSS Diario Marketing','Revisión Acuerdos Gerencia','Historias Instagram Semanal','Asistencia Diaria Admin','Recepción Documentos Diario Inv','Apertura Diaria - Quilpué','Cierre Diario - Quilpué'].map(t=>`
+            <div style="background:linear-gradient(90deg,#FEF3C7 0%,#FED7AA 50%,#FBCFE8 100%);border-radius:6px;padding:4px 8px;margin-bottom:3px;font-size:7px;color:#1E293B;font-weight:600;">${t} — 2026-05-18</div>
+          `).join('')}
+          <div style="font-size:7px;color:#CBD5E1;margin-top:3px;text-align:center;">+ 4 más · sigue lista plana</div>
         </div>`;
 
-  PREVIEW_HTML['mi-dia'].v4 = `${miniSidebar('mi-dia','v2')}
+  // === V4 SMC NUEVA · COPIA V3 + 8 NEWs encima (mismo look base · sumar evolución) ===
+  const _miDiaV4Sidebar = _miDiaV3Sidebar;
+
+  PREVIEW_HTML['mi-dia'].v4 = `${_miDiaV4Sidebar}
         <div class="mini-main">
-          <div class="mini-h1">Buenas noches, Daniel ⚡</div>
-          <div class="mini-sub">lunes, 18 de mayo</div>
-          <div class="mini-kpi-row">
-            <div class="mini-kpi"><div class="num warn">14</div><div class="lbl">checklists</div></div>
-            <div class="mini-kpi"><div class="num warn">3</div><div class="lbl">tareas</div></div>
-            <div class="mini-kpi"><div class="num danger">0%</div><div class="lbl">ayer · -12%</div></div>
-            <div class="mini-kpi" style="background:linear-gradient(135deg,#F3E8FF,#FCE7F3);"><div class="num">68%</div><div class="lbl">prom sem ▁▂▃▅▆▇▆</div></div>
+          <div style="font-size:7px;color:#94A3B8;margin-bottom:3px;">🏠 Inicio › Mi Día</div>
+          <div class="mini-h1">Buenas noches, Daniel <span style="color:#EC4899">⚡</span></div>
+          <div class="mini-sub">lunes, 18 de mayo de 2026</div>
+          <!-- 🆕 Filters bar segmented sticky -->
+          <div style="position:sticky;top:0;background:rgba(255,255,255,0.95);backdrop-filter:blur(8px);padding:4px 0;margin:4px -4px 6px;z-index:5;display:flex;gap:3px;flex-wrap:wrap;border-bottom:1px solid #EADCFB;">
+            <span style="font-size:7px;padding:3px 8px;background:linear-gradient(135deg,#A855F7,#EC4899);color:white;border-radius:999px;font-weight:700;">Todo</span>
+            <span style="font-size:7px;padding:3px 8px;background:white;border:1px solid #E2E8F0;border-radius:999px;color:#64748B;">🛍 Bendito</span>
+            <span style="font-size:7px;padding:3px 8px;background:white;border:1px solid #E2E8F0;border-radius:999px;color:#64748B;">🎉 Eventos</span>
+            <span style="font-size:7px;padding:3px 8px;background:white;border:1px solid #E2E8F0;border-radius:999px;color:#64748B;">🌐 Web</span>
+            <span style="font-size:7px;padding:3px 8px;background:linear-gradient(135deg,#F3E8FF,#FCE7F3);color:#7C3AED;border-radius:999px;font-weight:700;margin-left:auto;">🏪 Q + SA</span>
           </div>
-          <div style="display:flex;gap:3px;margin:6px 0;flex-wrap:wrap;">
-            <span style="font-size:8px;padding:3px 7px;background:linear-gradient(135deg,#F3E8FF,#FCE7F3);color:var(--v2-brand);border-radius:999px;font-weight:700;">Hoy</span>
-            <span style="font-size:8px;padding:3px 7px;background:white;border:1px solid var(--v2-border);border-radius:999px;color:#64748B;">7d</span>
-            <span style="font-size:8px;padding:3px 7px;background:white;border:1px solid var(--v2-border);border-radius:999px;color:#64748B;">30d</span>
-            <span style="font-size:8px;padding:3px 7px;background:white;border:1px solid var(--v2-border);border-radius:999px;color:#64748B;margin-left:auto;">🏪 Q+SA</span>
+          <!-- 🆕 KPI con tendencia 7d/30d + sparkline -->
+          <div style="display:flex;gap:4px;margin-bottom:8px;flex-wrap:wrap;">
+            <div style="background:#EFF6FF;border:1px solid #DBEAFE;border-radius:999px;padding:4px 9px;font-size:7px;color:#1E40AF;"><strong style="color:#2563EB;font-size:10px;">14</strong> checklists</div>
+            <div style="background:#FFF7ED;border:1px solid #FED7AA;border-radius:999px;padding:4px 9px;font-size:7px;color:#9A3412;"><strong style="color:#EA580C;font-size:10px;">3</strong> tareas</div>
+            <div style="background:#FEF2F2;border:1px solid #FECACA;border-radius:999px;padding:4px 9px;font-size:7px;color:#991B1B;"><strong style="color:#DC2626;font-size:10px;">0%</strong> ayer <span style="color:#EF4444;">▼-12%</span></div>
+            <div style="background:linear-gradient(135deg,#F3E8FF,#FCE7F3);border:1px solid #D4BBFC;border-radius:999px;padding:4px 9px;font-size:7px;color:#5B21B6;"><strong style="color:#7C3AED;font-size:10px;">68%</strong> 7d <span style="font-family:monospace;color:#7C3AED;">▁▂▃▅▆▇▆</span></div>
           </div>
-          <div class="mini-group-head">🔴 Urgente · 3 · 0/3</div>
-          <div class="mini-card-task urgent"><span>🔴</span><span style="font-weight:600;">Apertura Quilpué</span><span style="margin-left:auto;font-size:7px;color:#EF4444;">vencido</span></div>
-          <div class="mini-card-task urgent"><span>🔴</span><span style="font-weight:600;">Apertura San Antonio</span><span style="margin-left:auto;font-size:7px;color:#EF4444;">vencido</span></div>
-          <div class="mini-group-head">🏪 Operaciones · 5 · 1/5</div>
-          <div class="mini-card-task today"><span>🟡</span><span>Cierre Quilpué · 2/8</span></div>
-          <div class="mini-card-task today"><span>🟡</span><span>DMs Instagram</span></div>
-          <div class="mini-group-head">📣 Marketing · 3 · 0/3</div>
-          <div class="mini-card-task future"><span>🟢</span><span>RRSS Marketing</span></div>
-          <div style="position:sticky;bottom:0;margin-top:8px;background:linear-gradient(135deg,var(--v2-brand),#EC4899);color:white;padding:5px 10px;border-radius:8px;font-size:9px;font-weight:800;text-align:center;box-shadow:0 4px 12px rgba(124,58,237,0.3);">▶ Empezar mi día</div>
+          <!-- 🆕 Grupos: Urgente / Operaciones / Marketing / Gerencia + Prioridad 🔴🟡🟢 + Progress X de Y -->
+          <div style="font-size:7px;letter-spacing:1.5px;color:#DC2626;font-weight:800;margin:4px 0 4px;">🔴 URGENTE · 3 · 0 de 3</div>
+          <div style="background:linear-gradient(90deg,#FEF3C7,#FED7AA,#FBCFE8);border-left:3px solid #EF4444;border-radius:6px;padding:4px 8px;margin-bottom:3px;font-size:7px;font-weight:600;display:flex;align-items:center;gap:6px;">
+            <span style="color:#EF4444;">🔴</span><span style="flex:1;">Apertura Diaria - Quilpué</span><span style="font-size:6px;color:#EF4444;font-weight:800;">vencido</span>
+          </div>
+          <div style="background:linear-gradient(90deg,#FEF3C7,#FED7AA,#FBCFE8);border-left:3px solid #EF4444;border-radius:6px;padding:4px 8px;margin-bottom:3px;font-size:7px;font-weight:600;display:flex;align-items:center;gap:6px;">
+            <span>🔴</span><span style="flex:1;">Apertura Diaria - San Antonio</span><span style="font-size:6px;color:#EF4444;font-weight:800;">vencido</span>
+          </div>
+          <div style="background:linear-gradient(90deg,#FEF3C7,#FED7AA,#FBCFE8);border-left:3px solid #EF4444;border-radius:6px;padding:4px 8px;margin-bottom:5px;font-size:7px;font-weight:600;display:flex;align-items:center;gap:6px;">
+            <span>🔴</span><span style="flex:1;">Checklist Diario Gerencia</span><span style="font-size:6px;color:#EF4444;font-weight:800;">vencido</span>
+          </div>
+          <div style="font-size:7px;letter-spacing:1.5px;color:#7C3AED;font-weight:800;margin:4px 0 4px;">🏪 OPERACIONES · 5 · 1 de 5</div>
+          <div style="background:linear-gradient(90deg,#FEF3C7,#FED7AA,#FBCFE8);border-left:3px solid #F59E0B;border-radius:6px;padding:4px 8px;margin-bottom:3px;font-size:7px;font-weight:600;display:flex;align-items:center;gap:6px;">
+            <span>🟡</span><span style="flex:1;">Cierre Diario - Quilpué</span><span style="font-size:6px;color:#F59E0B;font-weight:800;">2 de 8</span>
+          </div>
+          <div style="background:linear-gradient(90deg,#FEF3C7,#FED7AA,#FBCFE8);border-left:3px solid #F59E0B;border-radius:6px;padding:4px 8px;margin-bottom:5px;font-size:7px;font-weight:600;display:flex;align-items:center;gap:6px;">
+            <span>🟡</span><span style="flex:1;">Asistencia Diaria Admin</span><span style="font-size:6px;color:#F59E0B;font-weight:800;">hoy</span>
+          </div>
+          <div style="font-size:7px;letter-spacing:1.5px;color:#EC4899;font-weight:800;margin:4px 0 4px;">📣 MARKETING · 3 · 0 de 3</div>
+          <div style="background:linear-gradient(90deg,#FEF3C7,#FED7AA,#FBCFE8);border-left:3px solid #10B981;border-radius:6px;padding:4px 8px;margin-bottom:3px;font-size:7px;font-weight:600;display:flex;align-items:center;gap:6px;">
+            <span>🟢</span><span style="flex:1;">RRSS Diario Marketing</span><span style="font-size:6px;color:#10B981;font-weight:800;">futuro</span>
+          </div>
+          <!-- 🆕 CTA "Empezar mi día" sticky -->
+          <div style="position:sticky;bottom:0;margin-top:6px;background:linear-gradient(135deg,#A855F7,#EC4899);color:white;padding:6px 10px;border-radius:8px;font-size:9px;font-weight:800;text-align:center;box-shadow:0 4px 16px rgba(124,58,237,0.35);">
+            ▶ Empezar mi día · siguiente: Apertura Quilpué
+          </div>
         </div>`;
 
   // Resto de secciones: v3 = v1 (Sergio NO fixeó nada entre v1 y v3) · v4 = v2 + label
